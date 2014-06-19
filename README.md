@@ -3,7 +3,42 @@ ZoneAgent 562
 
 Here is most awaited thing ZoneAgent for A3 562 client. You can use this ZoneAgent instead of 219 ZoneAgent along with 562 LoginAgent given by Karthik Panjaje (https://github.com/cyberinferno/Inferno-Login-Agent-562) or old LoginAgent and rest other 219 server files.
 This project is still under testing and development so don't consider it as full bug free ZoneAgent.
-If some one willing to contribute to this project most welcome.
 
 Requirements
 ------------
+1. Windows Operating System.
+2. .NET Framework 4.5 or higher.
+3. Visual Studio 2010 or higher (For making changes in the code and building it).
+4. 219 Server Files . For guides and downloads of creating a server visit http://forum.ragezone.com/f98/  .
+5. 562 LoginAgent given by Karthik Panjaje (https://github.com/cyberinferno/Inferno-Login-Agent-562) or old LoginAgent.
+
+Running Project
+---------------
+1. Open project in Visual Studio.
+2. Build project.
+3. Copy files from "Important Files" folder to the folder where ZoneAgent.exe is created by Visual Studio (usually in ZoneAgent\bin\Debug folder).
+4. Run 219 server ( 7770,8880,9990,LS,MS,AS,ZS,BS,CS ).
+5. Run 562 LoginAgent (given by karthik panjaje or old LoginAgent).
+6. Run ZoneAgent.exe created by building this project.
+
+Things that are working
+-----------------------
+1. Login
+2. Character Display
+3. Character Create
+4. Character Delete
+5. Enter Game
+6. Play Game
+
+Issues
+------
+Refer 
+
+Work going on
+-------------
+1. Clearing bugs
+2. Solving all issues as mentioned above
+
+Thanks To
+---------
+1. Karthik Panjaje (https://github.com/cyberinferno) for code and invaluable help
