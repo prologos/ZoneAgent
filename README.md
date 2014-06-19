@@ -32,7 +32,7 @@ Things that are working
 
 Issues
 ------
-Refer 
+Refer https://github.com/mihir7293/ZoneAgent/issues
 
 Work going on
 -------------
