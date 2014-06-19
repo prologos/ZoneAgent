@@ -41,4 +41,4 @@ Work going on
 
 Thanks To
 ---------
-1. Karthik Panjaje (https://github.com/cyberinferno) for code and invaluable help
+1. Karthik Panjaje (https://github.com/cyberinferno) for initial code and invaluable help
