@@ -51,6 +51,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="EventDrivenTCPClient.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>

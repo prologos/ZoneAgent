@@ -7,10 +7,15 @@ using System.IO;
 
 namespace ZoneAgent
 {
-    //Class for creating and  manipulating packets
+    /// <summary>
+    /// Class for creating and  manipulating packets
+    /// </summary>
     class Packet
     {
-        //Creating packet to connect to login server
+        /// <summary>
+        /// Creating packet to connect to login server
+        /// </summary>
+        /// <returns>returns packet to connect to loginserver</returns>
         public static byte[] LoginServerConnectPacket()
         {
             var packet = CombineByteArray(new byte[] { 0x20 }, GetBytesFrom(GetNullString(7)));
@@ -27,7 +32,10 @@ namespace ZoneAgent
             packet = CombineByteArray(packet, GetBytesFrom(GetNullString(2)));
             return packet;
         }
-        //Creating packet to connect to AccountServer,ZoneServer,BattleServer
+        /// <summary>
+        /// Creating packet to connect to AccountServer,ZoneServer,BattleServer
+        /// </summary>
+        /// <returns>Returns packet to connect to Zone</returns>
         public static byte[] ZoneConnectPacket()
         {
             byte[] packet = new byte[] { 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0xE0};
@@ -36,7 +44,13 @@ namespace ZoneAgent
             packet = CombineByteArray(packet, new[] { tempByte[0] });
             return packet;
         }
-        //Adding reverse of Client ID to the packet received from client
+        /// <summary>
+        /// Adding reverse of Client ID to the packet received from client
+        /// </summary>
+        /// <param name="pack">packet data</param>
+        /// <param name="id">client id</param>
+        /// <param name="size">size of packet</param>
+        /// <returns>returns packet with ClientId contains in it</returns>
         public static byte[] AddClientID(byte[] pack, int id, int size)
         {
             byte[] packet = new byte[size];
@@ -44,42 +58,39 @@ namespace ZoneAgent
             var temp = CreateReverseHexPacket(id);
             Array.Copy(temp, 0, packet, 4, temp.Length);
             Array.Copy(pack, 8, packet, 8, size - 8);
-            /*if (size == 37)//this change is for AccountServer seems to have client version (assumed by value not confirmed)
-            {
-                packet[33] = 0x47;
-                packet[34] = 0xF7;
-                packet[35] = 0x81;
-            }*/
-            /*if (size == 30)
-            {
-                byte[] tempByte = new byte[30];
-                Array.Copy(packet, 0, tempByte, 0, 22);
-                temp = CreateReverseHexPacket(id);
-                Array.Copy(temp, 0, tempByte, 22, temp.Length);
-                Array.Copy(packet, 26, tempByte, 26, 4);
-                packet = tempByte;
-            }*/
             return packet;
         }
-        //Gets character name from packet starting from specified value
-        public static string GetCharName(byte[] packet, int i)
+
+        /// <summary>
+        /// Gets character name from packet starting from specified index value
+        /// </summary>
+        /// <param name="packet">packet data</param>
+        /// <param name="index">index value</param>
+        /// <returns>returns string fetched from packet data</returns>
+        public static string GetCharName(byte[] packet, int index)
         {
             string character = "";
-            while (packet[i] != '\0')
+            while (packet[index] != '\0')
             {
-                character += ((char)packet[i]).ToString();
-                i++;
+                character += ((char)packet[index]).ToString();
+                index++;
             }
             return character;
         }
-        //Gets Client ID from packet
+        /// <summary>
+        /// Gets Client ID from packet
+        /// </summary>
+        /// <param name="data">packet data</param>
+        /// <returns>returns integer value that represents Client ID</returns>
         public static int GetClientId(byte[] data)
-        {   
-            int id= BitConverter.ToInt32(data, 0);
-            return id;
-            //return (data[1] << 8) | data[0];
+        {
+            return BitConverter.ToInt32(data, 0);
         }
-        //Alter charcter packet received from AccountServer
+        /// <summary>
+        /// Alter charcter packet received from AccountServer(.acl file) according to 562 client
+        /// </summary>
+        /// <param name="packet">packet data</param>
+        /// <returns>returns 952 bytes packet that contains character info compatible</returns>
         public static byte[] AlterAccountServerPacket(byte[] packet)
         {
             var tempbytes = Crypt.Decrypt(packet);
@@ -106,7 +117,12 @@ namespace ZoneAgent
             return Crypt.Encrypt(tempbytes);
         }
 
-        //Create client status packet to send to LoginServer
+        /// <summary>
+        /// Create client status packet to send to LoginServer
+        /// </summary>
+        /// <param name="clientId">client id</param>
+        /// <param name="accountId">account name</param>
+        /// <returns>returns client status info packet to be send to loginserver</returns>
         public static byte[] CreateClientStatusPacket(int clientId, string accountId)
         {
             var packet = new byte[4] { 0x1F, 0x00, 0x00, 0x00 };
@@ -117,7 +133,13 @@ namespace ZoneAgent
             packet = CombineByteArray(packet, GetBytesFrom(GetNullString(31 - packet.Length)));
             return packet;
         }
-        //Create packet to get characters from Accountserver (this packet will be send to AccountServer)
+        /// <summary>
+        /// Create packet to get characters from Accountserver (this packet will be send to AccountServer)
+        /// </summary>
+        /// <param name="clientId">client Id</param>
+        /// <param name="accountId">account name</param>
+        /// <param name="ip">ip address of client</param>
+        /// <returns>returns packet to get characters</returns>
         public static byte[] CreateGetCharacterPacket(int clientId, string accountId, string ip)
         {
             var packet = new byte[] { 0x92, 0x00, 0x00, 0x00 };
@@ -133,7 +155,10 @@ namespace ZoneAgent
             packet = CombineByteArray(packet, GetBytesFrom(GetNullString(146 - packet.Length)));
             return packet;
         }
-        //Report to LS total no. of players online every 5 seconds
+        /// <summary>
+        /// Report to LS total no. of players online every 5 seconds
+        /// </summary>
+        /// <returns>Packet to send report packet to loginserver</returns>
         public static byte[] LSReporter()
         {
             byte[] packet = new byte[] { 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xE1 };
@@ -142,7 +167,10 @@ namespace ZoneAgent
             packet = CombineByteArray(packet, new byte[] { 0x03, 0x03 });
             return packet;
         }
-        //Gets current timestamp and returns it
+        /// <summary>
+        /// Gets current timestamp and returns it
+        /// </summary>
+        /// <returns>current timestamp</returns>
         public static string GetTime()
         {
             string time = "" + DateTime.Now.Year;
@@ -175,7 +203,14 @@ namespace ZoneAgent
             return time;
         }
 
-        //Disconnect packet to send to LoginServer to disconnect player from LoginServer 
+        /// <summary>
+        /// Disconnect packet to send to LoginServer to disconnect player from LoginServer
+        /// </summary>
+        /// <param name="clientid">client id</param>
+        /// <param name="username">account name</param>
+        /// <param name="time">timestamp</param>
+        /// <returns>packet to send disconnect request to loginserver</returns>
+ 
         public static byte[] SendDCToLS(int clientid,string username,string time)
         {
             byte[] packet = new byte[] { 0x30, 0x00, 0x00, 0x00 };
@@ -187,7 +222,11 @@ namespace ZoneAgent
             packet = CombineByteArray(packet,GetBytesFrom(GetTime()));
             return packet;
         }
-        //Disconnect packet to send to ZoneServer to disconnect player from ZoneServer 
+        /// <summary>
+        /// Disconnect packet to send to ZoneServer to disconnect player from ZoneServer
+        /// </summary>
+        /// <param name="clientid">client id</param>
+        /// <returns>packet to disconnect character from zoneserver</returns>
         public static byte[] SendDCToASZS(int clientid)
         {
             byte[] packet = new byte[] { 0x0B, 0x00, 0x00, 0x00 };
@@ -196,7 +235,12 @@ namespace ZoneAgent
             packet = CombineByteArray(packet, new byte[] { 0x01, 0xE2, 0x00 });
             return packet;
         }
-        //Get packet type from packet
+        /// <summary>
+        /// Get packet type from packet
+        /// </summary>
+        /// <param name="packet">packet data</param>
+        /// <param name="length">length of packet</param>
+        /// <returns>packet type (to which server packet is to be send)</returns>
         public static int GetPacketType(byte[] packet,int length)
         {
             int packetType=Config.ZS_PACKET;
@@ -214,7 +258,13 @@ namespace ZoneAgent
                 packetType = Config.AS_PACKET;
             return packetType;
         }
-        //if client returns multiple packets in one then this nethod will split and add client id to each one of the packet and combine again
+        /// <summary>
+        /// if client returns multiple packets in one packet then this nethod will split and add client id to each one of the packet and combine again
+        /// </summary>
+        /// <param name="packet">packet data</param>
+        /// <param name="clientId">client id</param>
+        /// <param name="length">length of packet</param>
+        /// <returns>packet with client id</returns>
         public static byte[] CheckForMultiplePackets(byte[] packet,int clientId,int length)
         {
             byte[] packetLength=new byte[4];
@@ -240,7 +290,12 @@ namespace ZoneAgent
                 return returnPacket;
             }
         }
-        //Will split packet and return packets
+        /// <summary>
+        /// Will split packet and add packet to packet list
+        /// </summary>
+        /// <param name="packet">packet data</param>
+        /// <param name="length">length of packet</param>
+        /// <param name="spltPackets">list of packet by reference</param>
         public static void SplitPackets(byte[] packet, int length,ref List<byte[]> spltPackets)
         {
             byte[] packetLength = new byte[4];
@@ -264,8 +319,12 @@ namespace ZoneAgent
             }
         }
 
-
-        //Combining 2 byte array
+        /// <summary>
+        /// Combining 2 byte array
+        /// </summary>
+        /// <param name="a">byte array 1</param>
+        /// <param name="b">byte array 2</param>
+        /// <returns>returns combined byte array (byte array 1 + byte array 2)</returns>
         public static byte[] CombineByteArray(byte[] a, byte[] b)
         {
             var c = new byte[a.Length + b.Length];
@@ -273,14 +332,22 @@ namespace ZoneAgent
             Buffer.BlockCopy(b, 0, c, a.Length, b.Length);
             return c;
         }
-        //getting byte[] from string
+        /// <summary>
+        /// getting byte[] from string
+        /// </summary>
+        /// <param name="str">string data</param>
+        /// <returns>byte[] obtained from string data</returns>
         public static byte[] GetBytesFrom(string str)
         {
             var encoding = new ASCIIEncoding();
             Byte[] bytes = encoding.GetBytes(str);
             return bytes;
         }
-        //Creating reverse byte[] of int value
+        /// <summary>
+        /// Creating reverse byte[] of int value
+        /// </summary>
+        /// <param name="num">int value</param>
+        /// <returns>reverse byte[] of int value</returns>
         private static byte[] CreateReverseHexPacket(int num)
         {
             if (num == 0)
@@ -293,7 +360,11 @@ namespace ZoneAgent
             var tempByte = new[] { Convert.ToByte(temp, 16), Convert.ToByte(temp1, 16) };
             return tempByte;
         }
-        //Creating null string of specified no. of length
+        /// <summary>
+        /// Creating null string of specified no. of length
+        /// </summary>
+        /// <param name="length">length of packet</param>
+        /// <returns>null string of specified length</returns>
         public static string GetNullString(int length)
         {
             string str = "";
@@ -301,7 +372,12 @@ namespace ZoneAgent
                 str += char.ConvertFromUtf32(0);
             return str;
         }
-        //Triming packet according to length of packet
+        /// <summary>
+        /// Triming packet according to length of packet
+        /// </summary>
+        /// <param name="packet">packet data</param>
+        /// <param name="length">length of packet</param>
+        /// <returns>trimed packet according to length specified</returns>
         public static byte[] TrimPacket(byte[] packet, int length)
         {
             var newPacket = new byte[] { 0x00 };

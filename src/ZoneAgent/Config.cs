@@ -1,10 +1,11 @@
 ﻿using System.Net;
 namespace ZoneAgent
 {
-    /*
-     * Class that holds information about configuration of ZoneAgent and other servers
-     * AccountServer,ZoneServer,BattleServer and LoginServer
-    */ 
+    /// <summary>
+    /// Class that holds information about configuration of ZoneAgent and other servers
+    /// AccountServer,ZoneServer,BattleServer and LoginServer
+    /// Also defines constants
+    /// </summary>
     class Config
     {
         //ZoneAgent information
@@ -33,15 +34,12 @@ namespace ZoneAgent
         public static bool isBSConnected = false;
         public static bool isLSConnected = false;
 
-
         //Constants defining packet type
         public const int INVALID = -1;//if packet size 0 or <10
-        public const int LOGIN_PACKET = 0;
-        public const int AS_PACKET = 1;
-        public const int ZS_PACKET = 2;
-        public const int BS_PACKET = 3;
-        public const int DISCONNECT_PACKET = 4;
-
-        
+        public const int LOGIN_PACKET = 0;//login packet . packet size 56
+        public const int AS_PACKET = 1; // Packet to be send to AccountServer
+        public const int ZS_PACKET = 2; // Packet to be send to ZoneServer
+        public const int BS_PACKET = 3; // PAcket to be send to BattleServer
+        public const int DISCONNECT_PACKET = 4; // Disconnect packet
     }
 }

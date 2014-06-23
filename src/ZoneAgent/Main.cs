@@ -19,39 +19,48 @@ namespace ZoneAgent
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// Prompts user if user wants to close ZoneAgent or not
+        /// if yes program exits else not
+        /// </summary>
         private void btnclose_Click(object sender, EventArgs e)
         {
-            //Prompts user if user wants to close ZoneAgent or not
-            //if yes program exits else not
             if (MessageBox.Show("Are you sure you want to close ??", "ZoneAgent", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+            {
                 ExitZoneAgent();
+            }
         }
-
+        /// <summary>
+        /// executes when program starts
+        /// </summary>
         private void Main_Load(object sender, EventArgs e)
         {
             //Checks if SvrInfo.ini is available or not.If not availabe exits ZoneAgent
             if(!File.Exists("SvrInfo.ini"))
             {
                 MessageBox.Show("SvrInfo.ini file missing !!!", "ZoneAgent", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Write("ZoneAgent.log", "Stop => File not found SvrInfo.ini");
                 ExitZoneAgent();
             }
             //Checks if SvrInfo.ini is available or not.If not availabe exits ZoneAgent
             if (!File.Exists("msvcp100d.dll"))
             {
                 MessageBox.Show("msvcp100d.dll file missing !!!", "ZoneAgent", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Write("ZoneAgent.log", "Stop => File not found msvcp100d.dll");
                 ExitZoneAgent();
             }
             //Checks if SvrInfo.ini is available or not.If not availabe exits ZoneAgent
             if (!File.Exists("msvcr100d.dll"))
             {
                 MessageBox.Show("msvcr100d.dll file missing !!!", "ZoneAgent", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Write("ZoneAgent.log", "Stop => File not found msvcr100d.dll");
                 ExitZoneAgent();
             }
             //Checks if SvrInfo.ini is available or not.If not availabe exits ZoneAgent
             if (!File.Exists("asdecr.dll"))
             {
                 MessageBox.Show("asdecr.dll file missing !!!", "ZoneAgent", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.Write("ZoneAgent.log", "Stop => File not found asdecr.dll");
                 ExitZoneAgent();
             }
             LoadConfig();
@@ -59,66 +68,82 @@ namespace ZoneAgent
             lblagentid.Text = Config.AGENT_ID.ToString();
             lblzoneport.Text = Config.ZA_PORT.ToString();
             new ZoneAgent();
-
         }
-        //LoadConfig() loads values from svrinfo.ini file to variables of Config class
+
+        /// <summary>
+        /// loads values from Svrinfo.ini file to variables of Config class
+        /// </summary>
         private void LoadConfig()
         {
-            StreamReader sr = new StreamReader("SvrInfo.ini");
-            string readLine;
-            string[] splt;
-            while ((readLine = sr.ReadLine()) != null)
+            try
             {
-                splt = readLine.Split('=');
-                switch (splt[0])
+                StreamReader sr = new StreamReader("SvrInfo.ini");
+                string readLine;
+                string[] splt;
+                while ((readLine = sr.ReadLine()) != null)
                 {
-                    case "SERVERID":
-                        Config.SERVER_ID = Int16.Parse(splt[1]);
-                        break;
-                    case "AGENTID":
-                        Config.AGENT_ID = Int16.Parse(splt[1]);
-                        break;
-                    case "IP"://ZA IP
-                        Config.ZA_IP = IPAddress.Parse(splt[1]);
-                        break;
-                    case "PORT"://ZA port
-                        Config.ZA_PORT = Int16.Parse(splt[1]);
-                        break;
-                    case "IP0"://AS IP
-                        Config.AS_IP = IPAddress.Parse(splt[1]);
-                        break;
-                    case "PORT0"://AS port
-                        Config.AS_PORT = Int16.Parse(splt[1]);
-                        break;
-                    case "IP1"://ZS P
-                        Config.ZS_IP = IPAddress.Parse(splt[1]);
-                        break;
-                    case "PORT1"://ZS port
-                        Config.ZS_PORT = Int16.Parse(splt[1]);
-                        break;
-                    case "IP2"://BS IP
-                        Config.BS_IP = IPAddress.Parse(splt[1]);
-                        break;
-                    case "PORT2"://BS port 
-                        Config.BS_PORT = Int16.Parse(splt[1]);
-                        break;
-                    case "IP3"://LS IP
-                        Config.LS_IP = IPAddress.Parse(splt[1]);
-                        break;
-                    case "PORT3"://LS port
-                        Config.LS_PORT = Int16.Parse(splt[1]);
-                        break;
+                    splt = readLine.Split('=');
+                    switch (splt[0])
+                    {
+                        case "SERVERID":
+                            Config.SERVER_ID = Int16.Parse(splt[1]);
+                            break;
+                        case "AGENTID":
+                            Config.AGENT_ID = Int16.Parse(splt[1]);
+                            break;
+                        case "IP"://ZA IP
+                            Config.ZA_IP = IPAddress.Parse(splt[1]);
+                            break;
+                        case "PORT"://ZA port
+                            Config.ZA_PORT = Int16.Parse(splt[1]);
+                            break;
+                        case "IP0"://AS IP
+                            Config.AS_IP = IPAddress.Parse(splt[1]);
+                            break;
+                        case "PORT0"://AS port
+                            Config.AS_PORT = Int16.Parse(splt[1]);
+                            break;
+                        case "IP1"://ZS P
+                            Config.ZS_IP = IPAddress.Parse(splt[1]);
+                            break;
+                        case "PORT1"://ZS port
+                            Config.ZS_PORT = Int16.Parse(splt[1]);
+                            break;
+                        case "IP2"://BS IP
+                            Config.BS_IP = IPAddress.Parse(splt[1]);
+                            break;
+                        case "PORT2"://BS port 
+                            Config.BS_PORT = Int16.Parse(splt[1]);
+                            break;
+                        case "IP3"://LS IP
+                            Config.LS_IP = IPAddress.Parse(splt[1]);
+                            break;
+                        case "PORT3"://LS port
+                            Config.LS_PORT = Int16.Parse(splt[1]);
+                            break;
+                    }
                 }
+                sr.Close();
             }
-            sr.Close();
+            catch (Exception reader)
+            {
+                Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "StreamReader : "+reader.ToString());
+                ExitZoneAgent();
+            }
         }
-        //ExitZoneAgent() Exits program
+        
+        /// <summary>
+        /// Exits ZoneAgent
+        /// </summary>
         private void ExitZoneAgent()
         {
-            Process p = Process.GetCurrentProcess();
-            p.Kill();
+            Application.ExitThread();
+            Application.Exit();
         }
-        //refreshzonestatus_Tick refreshes status of Servers connected/disconnected
+        
+        /// <summary>
+        /// refreshes status of Servers connected/disconnected on form every 2 seconds
+        /// </summary>
         private void refreshzonestatus_Tick(object sender, EventArgs e)
         {
             Config.CONNECTED_SERVER_COUNT = 0;
@@ -146,6 +171,13 @@ namespace ZoneAgent
             if (Config.isBSConnected)
                 Config.CONNECTED_SERVER_COUNT++;
             lblconnectedzonecount.Text = Config.CONNECTED_SERVER_COUNT.ToString();
+        }
+        /// <summary>
+        /// Executes when form is closed
+        /// </summary>
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Logger.Write("ZoneAgent.log", "Stop => Closed");
         }
     }
 }

@@ -2,7 +2,9 @@
 using System.Runtime.InteropServices;
 namespace ZoneAgent
 {
-    //Class for encrypting and decrypting packets
+    /// <summary>
+    /// Class for encrypting and decrypting packets
+    /// </summary>
     class Crypt
     {
         [DllImportAttribute("asdecr.dll", EntryPoint = "decrypt_acl", CallingConvention = CallingConvention.Cdecl)]
@@ -11,7 +13,11 @@ namespace ZoneAgent
         [DllImportAttribute("asdecr.dll", EntryPoint = "encrypt_acl", CallingConvention = CallingConvention.Cdecl)]
         public static extern int encrypt_acl(IntPtr acldata, int size, int header);
 
-        //Decrpyt() to decrypt packets
+        /// <summary>
+        /// To decrypt packet data
+        /// </summary>
+        /// <param name="packet">data</param>
+        /// <returns>returns decrypted data</returns>
         public static byte[] Decrypt(byte[] packet)
         {
             var length = packet.Length;
@@ -22,7 +28,11 @@ namespace ZoneAgent
             Marshal.FreeHGlobal(unmanagedPointer);
             return packet;
         }
-        //Encrypt() to encrypt packets
+        /// <summary>
+        /// To encrypt packet data
+        /// </summary>
+        /// <param name="packet">data</param>
+        /// <returns>returns encrypted packet</returns>
         public static byte[] Encrypt(byte[] packet)
         {
             var length = packet.Length;

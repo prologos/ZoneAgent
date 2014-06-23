@@ -247,7 +247,7 @@
             // refreshzonestatus
             // 
             this.refreshzonestatus.Enabled = true;
-            this.refreshzonestatus.Interval = 3000;
+            this.refreshzonestatus.Interval = 2000;
             this.refreshzonestatus.Tick += new System.EventHandler(this.refreshzonestatus_Tick);
             // 
             // Main
@@ -282,6 +282,7 @@
             this.MaximizeBox = false;
             this.Name = "Main";
             this.Text = "ZoneAgent";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.Load += new System.EventHandler(this.Main_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
