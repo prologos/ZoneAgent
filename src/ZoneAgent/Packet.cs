@@ -299,24 +299,65 @@ namespace ZoneAgent
         public static void SplitPackets(byte[] packet, int length,ref List<byte[]> spltPackets)
         {
             byte[] packetLength = new byte[4];
-            Array.Copy(packet, packetLength, 4);
+            Array.Copy(packet,0, packetLength,0, 4);
             int packetLen = GetClientId(packetLength);
             if (packetLen == length)
                 spltPackets.Add(packet);
             else
             {
-                int i = 0;
                 byte[] temp;
-                while (i < length)
+                for (int i = 0; i < length;i=i+packetLen )
                 {
                     Array.Copy(packet, i, packetLength, 0, 4);
                     packetLen = GetClientId(packetLength);
                     temp = new byte[packetLen];
                     Array.Copy(packet, i, temp, 0, packetLen);
                     spltPackets.Add(temp);
-                    i += packetLen;
+                    //File.WriteAllBytes("Changed_ZS_" + Environment.TickCount + "_" +i+"_"+ temp.Length, temp);
+                    //i += packetLen;
                 }
             }
+        }
+        /// <summary>
+        /// Will make packet to display ping to player
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        public static byte[] DisplayPing(int clientID,long ping)
+        {
+            byte[] packet = new byte[] { 0x1E, 0xB9, 0x41, 0x01, 0x55, 0xBB, 0x4C, 0x9F, 0x7B, 0xAE, 0x2E, 0xB5, 0x0C, 0xFF, 0xFF, 0xFF, 0xFF, 0x4E, 0x4F, 0x54, 0x49, 0x43, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            packet = CombineByteArray(packet, GetBytesFrom("Wz"+Config.WZ+"  "));
+            packet = CombineByteArray(packet, GetBytesFrom("Exp" + Config.EXP + "  "));
+            packet = CombineByteArray(packet, GetBytesFrom("Quest Exp" + Config.QUEST_EXP + "  "));
+            packet = CombineByteArray(packet, GetBytesFrom("Drop Rate" + Config.DROP_RATE + "  "));
+            if(ping<1000)
+                packet = CombineByteArray(packet, GetBytesFrom("Ping "+ping.ToString()+" ms"));
+            else
+                packet = CombineByteArray(packet, GetBytesFrom("Ping ---"));
+            packet = CombineByteArray(packet,GetBytesFrom(GetNullString(102-packet.Length)));
+            var tempBytes = Crypt.Encrypt(packet);
+            var id = CreateReverseHexPacket(clientID);
+            id=CombineByteArray(id,GetBytesFrom(GetNullString(4-id.Length)));
+            for (int i = 4; i < 7; i++)
+            {
+                tempBytes[i] = id[i - 4];
+            }
+            return tempBytes;
+            
+        }
+        /// <summary>
+        /// To set status bar values like Wz, Exp,Quest Exp , Drop rate
+        /// It will be used by DisplayPing timer to display ping
+        /// </summary>
+        /// <param name="packet">Data packet</param>
+        public static void SetStatusValues(byte[] packet)
+        {
+            var statusPacket = Crypt.Decrypt(packet);
+            string status = Encoding.Default.GetString(statusPacket);
+            Config.WZ = status.Substring(42, 5);
+            Config.EXP = status.Substring(55, 5);
+            Config.QUEST_EXP = status.Substring(74, 5);
+            Config.DROP_RATE = status.Substring(93, 5);
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using System.IO;
+using System.Net.NetworkInformation;
 namespace ZoneAgent
 {
     /// <summary>
@@ -25,7 +26,9 @@ namespace ZoneAgent
         TcpListener ZA; // listener for ZoneAgent
         List<Client> clients;//list to store client information
         Dictionary<int, PlayerInfo> player; // Dictionary to store player information int=client id and PlayerInfo object
-        Timer LSReporter;//timer to report LoginServer every 5 seconds
+        Timer LSReporter, PingDisplay;//LSReporter=timer to report LoginServer every 5 seconds,PingDisplay=timer to display ping to each player refresh every 10 seconds
+        Ping ping;//to ping ip
+        PingReply reply;//to get reply of ping
         /// <summary>
         /// Constructor
         /// Will create instance with specified ip and port
@@ -60,7 +63,13 @@ namespace ZoneAgent
             LSReporter = new Timer();
             LSReporter.Interval = 5000;
             LSReporter.Tick += LSReporter_Tick;
-
+            //Timer to display ping to each player
+            PingDisplay = new Timer();
+            PingDisplay.Interval = 7000;
+            PingDisplay.Tick += PingDisplay_Tick;
+            PingDisplay.Enabled = true;
+            PingDisplay.Start();
+            
             //Connect to servers one by one
             try
             {
@@ -73,6 +82,35 @@ namespace ZoneAgent
             catch (Exception connect)
             {
                 Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "Connect : " + connect.ToString());
+            }
+        }
+        /// <summary>
+        /// Will display ping to every player refresh time 10 seconds
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void PingDisplay_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (var client in clients)
+                {
+                    if (player[client.UniqID].ZoneStatus)
+                    {
+                        var clientAddress = (IPEndPoint)client.TcpClient.Client.RemoteEndPoint;
+                        ping = new Ping();
+                        reply = ping.Send(clientAddress.Address);
+                        if (reply.Status == IPStatus.Success)
+                            Write(client.TcpClient, Packet.DisplayPing(client.UniqID, reply.RoundtripTime));
+                        else
+                            Write(client.TcpClient, Packet.DisplayPing(client.UniqID, 999));
+                    }
+
+                }
+            }
+            catch (Exception PingDisp)
+            {
+                Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "Display Ping : " + PingDisp);
             }
         }
 
@@ -254,17 +292,20 @@ namespace ZoneAgent
             try
             {
                 var packet = Encoding.Default.GetBytes(data.ToString());
+                //File.WriteAllBytes("OGZS_" + Environment.TickCount + "_" + packet.Length, packet);
                 List<byte[]> packetList = new List<byte[]>();
                 packetList.Clear();
                 Packet.SplitPackets(packet, packet.Length, ref packetList);
                 for (int i = 0; i < packetList.Count; i++)
                 {
+                    //File.WriteAllBytes("ZS_" + Environment.TickCount + "_" + packetList[i].Length, packetList[i]);
                     var temp = new byte[4];
                     Array.Copy(packetList[i], 4, temp, 0, 4);
                     int id = Packet.GetClientId(temp);
                     if (player.ContainsKey(id))
                     {
                         var playerinfo = player[id];
+                        //Below condition is for disconneting client or reconnecting client
                         if (packetList[i][10] == 0x08 && packetList[i][11] == 0x11)
                         {
                             Config.PLAYER_COUNT--;
@@ -281,7 +322,13 @@ namespace ZoneAgent
                                 }
                             }
                         }
+                        //Below condition is to reduce chance of other packets come under same conditions
                         Write(playerinfo.Client.TcpClient, packetList[i]);
+                        if (packetList[i][10] == 0x00 && packetList[i][11] == 0x18 && packetList[i][12] == 0x74 && packetList[i][13] == 0xCE && packetList[i][14] == 0xCA && packetList[i][15] == 0xE9 && packetList[i][16] == 0x87 && packetList[i][17] == 0x7F && packetList[i][18] == 0xAB)
+                        {
+                            var tempPacket = packetList[i];
+                            Packet.SetStatusValues(tempPacket);
+                        }
                     }
                 }
             }
