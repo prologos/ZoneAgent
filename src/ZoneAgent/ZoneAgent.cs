@@ -103,7 +103,7 @@ namespace ZoneAgent
                         if (reply.Status == IPStatus.Success)
                             Write(client.TcpClient, Packet.DisplayPing(client.UniqID, reply.RoundtripTime));
                         else
-                            Write(client.TcpClient, Packet.DisplayPing(client.UniqID, 999));
+                            Write(client.TcpClient, Packet.DisplayPing(client.UniqID, 1000));
                     }
 
                 }
