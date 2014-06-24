@@ -30,6 +30,10 @@ Things that are working
 5. Enter Game
 6. Play Game
 
+Features Added
+--------------
+1. Ping display.
+
 Issues
 ------
 Refer https://github.com/mihir7293/ZoneAgent/issues
