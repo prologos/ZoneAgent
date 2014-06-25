@@ -14,12 +14,18 @@ Requirements
 
 Running Project
 ---------------
+For those who have Visual Studio
 1. Open project in Visual Studio.
 2. Build project.
 3. Copy files from "Important Files" folder to the folder where ZoneAgent.exe is created by Visual Studio (usually in ZoneAgent\bin\Debug folder).
 4. Run 219 server ( 7770,8880,9990,LS,MS,AS,ZS,BS,CS ).
 5. Run 562 LoginAgent (given by Cyberinferno or old LoginAgent).
 6. Run ZoneAgent.exe created by building this project.
+
+For those who don't have Visual Studio
+1. Go into src\ZoneAgent\bin\Debug
+2. Edit Svrinfo.initial
+3. Run ZoneAgent.exe
 
 Things that are working
 -----------------------

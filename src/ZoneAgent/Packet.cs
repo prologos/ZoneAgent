@@ -250,6 +250,10 @@ namespace ZoneAgent
                 packetType = Config.LOGIN_PACKET;
             else if (packet[10] == 0x06 && packet[11] == 0x11)//Validating character to enter game
                 packetType = Config.AS_PACKET;
+            else if (packet[10] == 0x22 && packet[11] == 0x23)//For KH Crest
+                packetType = Config.AS_PACKET;
+            else if (packet[10] == 0x23 && packet[11] == 0x23)//For KH Crest
+                packetType = Config.AS_PACKET;
             else if (packet[10] == 0x08 && packet[11] == 0x11)//Disconnet Packet
                 packetType = Config.DISCONNECT_PACKET;
             else if (packet[10] == 0x01 && packet[11] == 0xA0)//Create char packet

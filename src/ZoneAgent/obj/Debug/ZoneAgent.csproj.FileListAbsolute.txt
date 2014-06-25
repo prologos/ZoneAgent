@@ -1,0 +1,21 @@
+G:\ZoneAgent\ZoneAgent\bin\Debug\ZoneAgent.exe.config
+G:\ZoneAgent\ZoneAgent\bin\Debug\ZoneAgent.exe
+G:\ZoneAgent\ZoneAgent\bin\Debug\ZoneAgent.pdb
+G:\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.csprojResolveAssemblyReference.cache
+G:\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.Main.resources
+G:\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.Properties.Resources.resources
+G:\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.csproj.GenerateResource.Cache
+G:\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.exe
+G:\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.pdb
+D:\A3 Source\ZoneAgent\ZoneAgent\bin\Debug\ZoneAgent.exe.config
+D:\A3 Source\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.exe
+D:\A3 Source\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.pdb
+D:\A3 Source\ZoneAgent\ZoneAgent\bin\Debug\ZoneAgent.exe
+D:\A3 Source\ZoneAgent\ZoneAgent\bin\Debug\ZoneAgent.pdb
+D:\A3 Source\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.csprojResolveAssemblyReference.cache
+D:\A3 Source\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.Main.resources
+D:\A3 Source\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.Properties.Resources.resources
+D:\A3 Source\ZoneAgent\ZoneAgent\obj\Debug\ZoneAgent.csproj.GenerateResource.Cache
+D:\A3 Source\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.exe.config
+D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.exe
+D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.pdb
