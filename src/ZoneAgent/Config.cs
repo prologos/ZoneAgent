@@ -43,10 +43,10 @@ namespace ZoneAgent
         public const int DISCONNECT_PACKET = 4; // Disconnect packet
 
         //variables that is displayed in bar where ping is displayed
-        public static string WZ = "[1.0]";
-        public static string EXP = "[1.0]";
-        public static string QUEST_EXP = "[1.0]";
-        public static string DROP_RATE = "[1.0]";
+        public static string WZ = "1.0";
+        public static string EXP = "1.0";
+        public static string QUEST_EXP = "1.0";
+        public static string DROP_RATE = "1.0";
 
 
     }

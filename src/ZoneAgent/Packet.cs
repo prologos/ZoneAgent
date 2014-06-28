@@ -330,14 +330,14 @@ namespace ZoneAgent
         public static byte[] DisplayPing(int clientID,long ping)
         {
             byte[] packet = new byte[] { 0x1E, 0xB9, 0x41, 0x01, 0x55, 0xBB, 0x4C, 0x9F, 0x7B, 0xAE, 0x2E, 0xB5, 0x0C, 0xFF, 0xFF, 0xFF, 0xFF, 0x4E, 0x4F, 0x54, 0x49, 0x43, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            packet = CombineByteArray(packet, GetBytesFrom("Wz"+Config.WZ+"  "));
-            packet = CombineByteArray(packet, GetBytesFrom("Exp" + Config.EXP + "  "));
-            packet = CombineByteArray(packet, GetBytesFrom("Quest Exp" + Config.QUEST_EXP + "  "));
-            packet = CombineByteArray(packet, GetBytesFrom("Drop Rate" + Config.DROP_RATE + "  "));
+            packet = CombineByteArray(packet, GetBytesFrom("Wz:"+Config.WZ+"  "));
+            packet = CombineByteArray(packet, GetBytesFrom("Exp:" + Config.EXP + "  "));
+            packet = CombineByteArray(packet, GetBytesFrom("Quest Exp:" + Config.QUEST_EXP + "  "));
+            packet = CombineByteArray(packet, GetBytesFrom("Drop Rate:" + Config.DROP_RATE + "  "));
             if(ping<1000)
-                packet = CombineByteArray(packet, GetBytesFrom("Ping "+ping.ToString()+" ms"));
+                packet = CombineByteArray(packet, GetBytesFrom("Ping:"+ping.ToString()+" ms"));
             else
-                packet = CombineByteArray(packet, GetBytesFrom("Ping ---"));
+                packet = CombineByteArray(packet, GetBytesFrom("Ping:---"));
             packet = CombineByteArray(packet,GetBytesFrom(GetNullString(102-packet.Length)));
             var tempBytes = Crypt.Encrypt(packet);
             var id = CreateReverseHexPacket(clientID);
@@ -358,10 +358,58 @@ namespace ZoneAgent
         {
             var statusPacket = Crypt.Decrypt(packet);
             string status = Encoding.Default.GetString(statusPacket);
+            int i=0, j=0;
+            for (int k = 0; k < 4; k++)
+            {
+                if (k == 0)
+                {
+                    i = status.IndexOf('[');
+                    j = status.IndexOf(']');
+                    Config.WZ = status.Substring(i + 1, (j - i) - 1).Trim();
+                }
+                else
+                {
+                    i = status.IndexOf('[', i);
+                    j = status.IndexOf(']', j);
+                }
+                if (k == 1)
+                    Config.EXP = status.Substring(i + 1, (j - i) - 1).Trim();
+                if(k==2)
+                    Config.QUEST_EXP=status.Substring(i + 1, (j - i) - 1).Trim();
+                if(k==3)
+                    Config.DROP_RATE = status.Substring(i + 1, (j - i) - 1).Trim();
+                i++;
+                j++;
+
+            }
+            /*
+            string temp = status;
+            string wz = "";
+            int i = temp.IndexOf('[');
+            int j = temp.IndexOf(']');
+            wz+="-"+temp.Substring(i+1,(j-i)-1).Trim();
+            i++;
+            j++;
+            i = temp.IndexOf('[',i);
+            j = temp.IndexOf(']',j);
+            wz += "-" + temp.Substring(i + 1, (j - i)-1).Trim();
+            i++;
+            j++;
+            i = temp.IndexOf('[',i);
+            j = temp.IndexOf(']',j);
+            wz += "-" + temp.Substring(i + 1, (j - i)-1).Trim();
+            i++;
+            j++;
+            i = temp.IndexOf('[',i);
+            j = temp.IndexOf(']',j);
+            wz += "-" + temp.Substring(i + 1, (j - i)-1).Trim();
+            StreamWriter s = new StreamWriter("chktest");
+            s.WriteLine(wz);
+            s.Close();
             Config.WZ = status.Substring(42, 5);
             Config.EXP = status.Substring(55, 5);
             Config.QUEST_EXP = status.Substring(74, 5);
-            Config.DROP_RATE = status.Substring(93, 5);
+            Config.DROP_RATE = status.Substring(93, 5);*/
         }
 
         /// <summary>
