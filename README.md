@@ -55,3 +55,4 @@ Work going on
 Thanks To
 ---------
 1. Cyberinferno (https://github.com/cyberinferno) for initial code and invaluable help
+2. chrissdegrece (http://forum.ragezone.com/members/775128.html) of Ragezone forums who gaved zoneagent code in vb
