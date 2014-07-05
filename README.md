@@ -45,8 +45,8 @@ Features Added
 
 Issues
 ------
-Refer https://github.com/mihir7293/ZoneAgent/issues 
-Note : Please do report any bugs or problems if came across
+Refer https://github.com/mihir7293/ZoneAgent/issues.
+Note : Please do report any bugs or problems if came across.
 
 Work going on
 -------------
