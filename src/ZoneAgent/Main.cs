@@ -97,17 +97,26 @@ namespace ZoneAgent
                         case "PORT"://ZA port
                             Config.ZA_PORT = Int16.Parse(splt[1]);
                             break;
+                        case "ID0"://AS ID
+                            Config.AS_ID = Int16.Parse(splt[1]);
+                            break;
                         case "IP0"://AS IP
                             Config.AS_IP = IPAddress.Parse(splt[1]);
                             break;
                         case "PORT0"://AS port
                             Config.AS_PORT = Int16.Parse(splt[1]);
                             break;
+                        case "ID1"://ZS ID
+                            Config.ZS_ID = Int16.Parse(splt[1]);
+                            break;
                         case "IP1"://ZS P
                             Config.ZS_IP = IPAddress.Parse(splt[1]);
                             break;
                         case "PORT1"://ZS port
                             Config.ZS_PORT = Int16.Parse(splt[1]);
+                            break;
+                        case "ID2"://BS ID
+                            Config.BS_ID = Int16.Parse(splt[1]);
                             break;
                         case "IP2"://BS IP
                             Config.BS_IP = IPAddress.Parse(splt[1]);

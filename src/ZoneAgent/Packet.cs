@@ -241,9 +241,11 @@ namespace ZoneAgent
         /// <param name="packet">packet data</param>
         /// <param name="length">length of packet</param>
         /// <returns>packet type (to which server packet is to be send)</returns>
-        public static int GetPacketType(byte[] packet,int length)
+        public static int GetPacketType(byte[] packet, int length, PlayerInfo playerInformation)
         {
             int packetType=Config.ZS_PACKET;
+            if (playerInformation!=null &&  playerInformation.ZoneStatus == Config.BS_ID)
+                packetType = Config.BS_ID;
             if (length == 0 || length <= 10)//For packet length 0 or <=10
                 packetType = Config.INVALID;
             else if (packet[8] == 0x01 && packet[9] == 0xE2)//Login Packet
@@ -254,12 +256,26 @@ namespace ZoneAgent
                 packetType = Config.AS_PACKET;
             else if (packet[10] == 0x23 && packet[11] == 0x23)//For KH Crest
                 packetType = Config.AS_PACKET;
-            else if (packet[10] == 0x08 && packet[11] == 0x11)//Disconnet Packet
+            else if (packet[10] == 0x07 && packet[11] == 0x11)//ZoneServer entry packet
+                playerInformation.ZoneStatus = Config.ZS_ID;
+            else if (packet[10] == 0x08 && packet[11] == 0x11)//Disconnet Packet from ZS
+                packetType = Config.DISCONNECT_PACKET;
+            else if (packet[10] == 0x1B && packet[11] == 0x50)//Disconnet Packet from BS
                 packetType = Config.DISCONNECT_PACKET;
             else if (packet[10] == 0x01 && packet[11] == 0xA0)//Create char packet
                 packetType = Config.AS_PACKET;
             else if (packet[10] == 0x02 && packet[11] == 0xA0)//Delete char packet
                 packetType = Config.AS_PACKET;
+            else if (packet[10] == 0x00 && packet[11] == 0x37)//BattleServer entry Packet
+            {
+                playerInformation.ZoneStatus = Config.BS_ID;
+                packetType = Config.BS_PACKET;
+            }
+            else if (packet[10] == 0x01 && packet[11] == 0x35)//BattleServer exit Packet
+            {
+                playerInformation.ZoneStatus = Config.ZS_ID;
+                packetType = Config.ZS_PACKET;
+            }
             return packetType;
         }
         /// <summary>

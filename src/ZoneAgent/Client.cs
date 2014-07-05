@@ -12,7 +12,7 @@ namespace ZoneAgent
         /// </summary>
         /// <param name="tcpClient">TCPClient of client</param>
         /// <param name="buffer">buffer data</param>
-        public Client(TcpClient tcpClient, byte[] buffer)
+        public Client(TcpClient tcpClient, byte[] buffer,int randomId)
         {
             if (tcpClient == null)
                 throw new ArgumentNullException("tcpClient");
@@ -20,7 +20,7 @@ namespace ZoneAgent
                 throw new ArgumentNullException("buffer");
             TcpClient = tcpClient;
             Buffer = buffer;
-            UniqID = 0;
+            UniqID = -randomId;
         }
         public TcpClient TcpClient { get; private set; } //stores and returns TCPClient
 

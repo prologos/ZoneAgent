@@ -10,7 +10,7 @@ namespace ZoneAgent
         public string Account { get; set; } // stores and returns account name
         public string Time { get; set; } // stores and returns timestamp
         public bool Prepared { get; set; } // true=user prepared ; false=user not prepared
-        public bool ZoneStatus { get; set; } //true=user in game ; false=user not in game
+        public int ZoneStatus { get; set; } //true=user in game ; false=user not in game
         /// <summary>
         /// Constructor that stores refrences
         /// </summary>
@@ -18,7 +18,7 @@ namespace ZoneAgent
         /// <param name="time">timestamp</param>
         /// <param name="prepared">user prepared</param>
         /// <param name="zoneStatus">zonestatus</param>
-        public PlayerInfo(string account, string time, bool prepared, bool zoneStatus)
+        public PlayerInfo(string account, string time, bool prepared, int zoneStatus)
         {
             Account = account;
             Time = time;

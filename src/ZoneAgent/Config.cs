@@ -15,12 +15,15 @@ namespace ZoneAgent
         public static IPAddress ZA_IP = IPAddress.Parse("127.0.0.1");
         public static int ZA_PORT = 9984;
         //Account server information
+        public static int AS_ID = 255;
         public static IPAddress AS_IP = IPAddress.Parse("127.0.0.1");
         public static int AS_PORT = 5589;
         //Zone server information
+        public static int ZS_ID = 0;
         public static IPAddress ZS_IP = IPAddress.Parse("127.0.0.1");
         public static int ZS_PORT = 6689;
         //Battle server information
+        public static int BS_ID = 3;
         public static IPAddress BS_IP = IPAddress.Parse("127.0.0.1");
         public static int BS_PORT = 6999;
         //Login server information
