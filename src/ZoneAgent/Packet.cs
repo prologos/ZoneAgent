@@ -173,6 +173,33 @@ namespace ZoneAgent
         /// <returns>current timestamp</returns>
         public static string GetTime()
         {
+            /*string time = "" + DateTime.Now.Year;
+            string temp = "" + DateTime.Now.Month;
+            if (temp.Length == 1)
+                temp = "0" + temp;
+            time += temp;
+            temp = "" + DateTime.Now.Day;
+            if (temp.Length == 1)
+                temp = "0" + temp;
+            time += temp;
+            time += '\0';
+            temp = "" + DateTime.Now.Hour;
+            if (temp.Length == 1)
+                temp = "0" + temp;
+            time += temp;
+            temp = "" + DateTime.Now.Minute;
+            if (temp.Length == 1)
+                temp = "0" + temp;
+            time += temp;
+            temp = "" + DateTime.Now.Second;
+            if (temp.Length == 1)
+                temp = "0" + temp;
+            time += temp;
+            if (time.Length < 16)
+            {
+                for (int i = time.Length; i < 16; i++)
+                    time += '\0';
+            }*/
             string time = DateTime.Now.ToString("yyyyMMdd") + '\0' + DateTime.Now.ToString("HHmmss") + '\0';
             return time;
         }
