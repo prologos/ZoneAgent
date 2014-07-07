@@ -461,14 +461,24 @@ namespace ZoneAgent
         private static byte[] CreateReverseHexPacket(int num)
         {
             if (num == 0)
-                return new byte[] {0x00, 0x00};
-            string hexPort = string.Format("{0:x}", num);
-            while (hexPort.Length < 4)
-                hexPort = "0" + hexPort;
-            string temp = hexPort[2] + hexPort[3].ToString();
-            string temp1 = hexPort[0] + hexPort[1].ToString();
-            var tempByte = new[] { Convert.ToByte(temp, 16), Convert.ToByte(temp1, 16) };
+                return new byte[] { 0x00, 0x00, 0x00, 0x00 };
+            string hexPort = string.Format("{0:X8}", num);
+            var tempByte = new byte[4];
+            tempByte = StringToByteArray(hexPort);
+            Array.Reverse(tempByte);
             return tempByte;
+        }
+        /// <summary>
+        /// hex string to byte array
+        /// </summary>
+        /// <param name="hex">string value</param>
+        /// <returns>byte[]</returns>
+        public static byte[] StringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
         }
         /// <summary>
         /// Creating null string of specified no. of length
