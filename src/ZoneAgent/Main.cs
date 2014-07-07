@@ -103,19 +103,19 @@ namespace ZoneAgent
                 Config.ZA_IP = IPAddress.Parse(GetIniValue("STARTUP", "IP", SvrInfo, "127.0.0.1"));
                 Config.ZA_PORT = Int16.Parse(GetIniValue("STARTUP", "PORT", SvrInfo, "9984"));
                 //LS
-                Config.LS_IP = Int16.Parse(GetIniValue("LOGINSERVER", "IP", SvrInfo, "127.0.0.1"));
+                Config.LS_IP = IPAddress.Parse(GetIniValue("LOGINSERVER", "IP", SvrInfo, "127.0.0.1"));
                 Config.LS_PORT = Int16.Parse(GetIniValue("LOGINSERVER", "PORT", SvrInfo, "3200"));
                 //AS
                 Config.AS_ID = Int16.Parse(GetIniValue("ACCOUNTSERVER", "ID", SvrInfo, "255"));
-                Config.AS_IP = Int16.Parse(GetIniValue("ACCOUNTSERVER", "IP", SvrInfo, "127.0.0.1"));
+                Config.AS_IP = IPAddress.Parse(GetIniValue("ACCOUNTSERVER", "IP", SvrInfo, "127.0.0.1"));
                 Config.AS_PORT = Int16.Parse(GetIniValue("ACCOUNTSERVER", "PORT", SvrInfo, "5589"));
                 //ZS
                 Config.ZS_ID = Int16.Parse(GetIniValue("ZONESERVER", "ID", SvrInfo, "0"));
-                Config.ZS_IP = Int16.Parse(GetIniValue("ZONESERVER", "IP", SvrInfo, "127.0.0.1"));
+                Config.ZS_IP = IPAddress.Parse(GetIniValue("ZONESERVER", "IP", SvrInfo, "127.0.0.1"));
                 Config.ZS_PORT = Int16.Parse(GetIniValue("ZONESERVER", "PORT", SvrInfo, "6689"));
                 //BS
                 Config.BS_ID = Int16.Parse(GetIniValue("BATTLESERVER", "ID", SvrInfo, "3"));
-                Config.BS_IP = Int16.Parse(GetIniValue("BATTLESERVER", "IP", SvrInfo, "127.0.0.1"));
+                Config.BS_IP = IPAddress.Parse(GetIniValue("BATTLESERVER", "IP", SvrInfo, "127.0.0.1"));
                 Config.BS_PORT = Int16.Parse(GetIniValue("BATTLESERVER", "PORT", SvrInfo, "6999"));
             }
             catch (Exception reader)
