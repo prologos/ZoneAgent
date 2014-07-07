@@ -168,7 +168,7 @@ namespace ZoneAgent
         {
             try
             {
-                var packet = Encoding.Default.GetBytes(data.ToString());
+                byte[] packet = (byte[])Convert.ChangeType(data, typeof(byte[]));
                 switch (packet.Length)
                 {
                     case 40://login
@@ -237,7 +237,7 @@ namespace ZoneAgent
         {
             try
             {
-                var packet = Encoding.Default.GetBytes(data.ToString());
+                byte[] packet = (byte[])Convert.ChangeType(data, typeof(byte[]));
                 //File.WriteAllBytes("AS_" + Environment.TickCount + "_" + packet.Length, packet);
                 var temp = new byte[4];
                 Array.Copy(packet, 4, temp, 0, 4);
@@ -294,7 +294,7 @@ namespace ZoneAgent
         {
             try
             {
-                var packet = Encoding.Default.GetBytes(data.ToString());
+                byte[] packet = (byte[])Convert.ChangeType(data, typeof(byte[]));
                 //File.WriteAllBytes("OGZS_" + Environment.TickCount + "_" + packet.Length, packet);
                 List<byte[]> packetList = new List<byte[]>();
                 packetList.Clear();
@@ -372,7 +372,7 @@ namespace ZoneAgent
         {
             try
             {
-                var packet = Encoding.Default.GetBytes(data.ToString());
+                byte[] packet = (byte[])Convert.ChangeType(data, typeof(byte[]));
                 //File.WriteAllBytes("OGZS_" + Environment.TickCount + "_" + packet.Length, packet);
                 List<byte[]> packetList = new List<byte[]>();
                 packetList.Clear();
