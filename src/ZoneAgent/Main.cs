@@ -76,13 +76,6 @@ namespace ZoneAgent
                 Logger.Write("ZoneAgent.log", "Stop => File not found msvcr100d.dll");
                 ExitZoneAgent();
             }
-            //Checks if SvrInfo.ini is available or not.If not availabe exits ZoneAgent
-            if (!File.Exists("asdecr.dll"))
-            {
-                MessageBox.Show("asdecr.dll file missing !!!", "ZoneAgent", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Logger.Write("ZoneAgent.log", "Stop => File not found asdecr.dll");
-                ExitZoneAgent();
-            }
             LoadConfig();
             lblserverid.Text = Config.SERVER_ID.ToString();
             lblagentid.Text = Config.AGENT_ID.ToString();

@@ -29,7 +29,6 @@ namespace ZoneAgent
             packet = CombineByteArray(packet, GetBytesFrom(Config.ZA_IP.ToString()));
             packet = CombineByteArray(packet, GetBytesFrom(GetNullString(16 - Config.ZA_IP.ToString().Length)));
             packet = CombineByteArray(packet, CreateReverseHexPacket(Config.ZA_PORT));
-            packet = CombineByteArray(packet, GetBytesFrom(GetNullString(2)));
             return packet;
         }
         /// <summary>
@@ -127,7 +126,6 @@ namespace ZoneAgent
         {
             var packet = new byte[4] { 0x1F, 0x00, 0x00, 0x00 };
             packet = CombineByteArray(packet, CreateReverseHexPacket(clientId));
-            packet = CombineByteArray(packet, GetBytesFrom(GetNullString(8 - packet.Length)));
             var temp = new byte[] { 0x02, 0xe3 };
             packet = CombineByteArray(packet, CombineByteArray(temp, GetBytesFrom(accountId)));
             packet = CombineByteArray(packet, GetBytesFrom(GetNullString(31 - packet.Length)));
@@ -144,7 +142,6 @@ namespace ZoneAgent
         {
             var packet = new byte[] { 0x92, 0x00, 0x00, 0x00 };
             packet = CombineByteArray(packet, CreateReverseHexPacket(clientId));
-            packet = CombineByteArray(packet, GetBytesFrom(GetNullString(8 - packet.Length)));
             packet = CombineByteArray(packet, new byte[] { 0x01, 0xE1 });
             packet = CombineByteArray(packet, GetBytesFrom(accountId));
             packet = CombineByteArray(packet, GetBytesFrom(GetNullString(52 - packet.Length)));
@@ -163,7 +160,6 @@ namespace ZoneAgent
         {
             byte[] packet = new byte[] { 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xE1 };
             packet = CombineByteArray(packet, CreateReverseHexPacket(Config.PLAYER_COUNT));
-            packet = CombineByteArray(packet, GetBytesFrom(GetNullString(14 - packet.Length)));
             packet = CombineByteArray(packet, new byte[] { 0x03, 0x03 });
             return packet;
         }
@@ -189,7 +185,6 @@ namespace ZoneAgent
         {
             byte[] packet = new byte[] { 0x30, 0x00, 0x00, 0x00 };
             packet = CombineByteArray(packet, CreateReverseHexPacket(clientid));
-            packet = CombineByteArray(packet,GetBytesFrom(GetNullString(8-packet.Length)));
             packet = CombineByteArray(packet, new byte[] { 0x02,0xE2,0x00});
             packet = CombineByteArray(packet, GetBytesFrom(username));
             packet = CombineByteArray(packet, GetBytesFrom(GetNullString(32 - packet.Length)));
@@ -205,7 +200,6 @@ namespace ZoneAgent
         {
             byte[] packet = new byte[] { 0x0B, 0x00, 0x00, 0x00 };
             packet = CombineByteArray(packet, CreateReverseHexPacket(clientid));
-            packet = CombineByteArray(packet, GetBytesFrom(GetNullString(8 - packet.Length)));
             packet = CombineByteArray(packet, new byte[] { 0x01, 0xE2, 0x00 });
             return packet;
         }
@@ -331,8 +325,7 @@ namespace ZoneAgent
             packet = CombineByteArray(packet,GetBytesFrom(GetNullString(102-packet.Length)));
             var tempBytes = Crypt.Encrypt(packet);
             var id = CreateReverseHexPacket(clientID);
-            id=CombineByteArray(id,GetBytesFrom(GetNullString(4-id.Length)));
-            for (int i = 4; i < 7; i++)
+            for (int i = 4; i < 8; i++)
             {
                 tempBytes[i] = id[i - 4];
             }
@@ -434,14 +427,24 @@ namespace ZoneAgent
         private static byte[] CreateReverseHexPacket(int num)
         {
             if (num == 0)
-                return new byte[] {0x00, 0x00};
-            string hexPort = string.Format("{0:x}", num);
-            while (hexPort.Length < 4)
-                hexPort = "0" + hexPort;
-            string temp = hexPort[2] + hexPort[3].ToString();
-            string temp1 = hexPort[0] + hexPort[1].ToString();
-            var tempByte = new[] { Convert.ToByte(temp, 16), Convert.ToByte(temp1, 16) };
+                return new byte[] { 0x00, 0x00, 0x00, 0x00 };
+            string hexPort = string.Format("{0:X8}", num);
+            var tempByte = new byte[4];
+            tempByte = StringToByteArray(hexPort);
+            Array.Reverse(tempByte);
             return tempByte;
+        }
+        /// <summary>
+        /// hex string to byte array
+        /// </summary>
+        /// <param name="hex">string value</param>
+        /// <returns>byte[]</returns>
+        public static byte[] StringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
         }
         /// <summary>
         /// Creating null string of specified no. of length
