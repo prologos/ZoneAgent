@@ -31,6 +31,7 @@ namespace ZoneAgent
         public static int LS_PORT = 3200;
         //Total player count
         public static int PLAYER_COUNT = 0;
+        public static int MAX_PLAYER_COUNT = 0;
         //Server Status
         public static bool isASConnected = false;
         public static bool isZSConnected = false;

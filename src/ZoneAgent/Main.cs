@@ -37,6 +37,7 @@ namespace ZoneAgent
         public Main()
         {
             InitializeComponent();
+            _Main = this;
         }
         /// <summary>
         /// Prompts user if user wants to close ZoneAgent or not
@@ -164,6 +165,19 @@ namespace ZoneAgent
             if (Config.isBSConnected)
                 Config.CONNECTED_SERVER_COUNT++;
             lblconnectedzonecount.Text = Config.CONNECTED_SERVER_COUNT.ToString();
+        }
+        /// <summary>
+        /// Refreshes Player Count
+        /// </summary>
+        public void Update_Player_Count()
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(Update_Player_Count));
+                return;
+            }
+            lblconnectioncount.Text = Config.PLAYER_COUNT.ToString();
+            lblmaxconnectioncount.Text = Config.MAX_PLAYER_COUNT.ToString();
         }
         /// <summary>
         /// Executes when form is closed
