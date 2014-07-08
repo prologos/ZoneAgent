@@ -313,8 +313,8 @@ namespace ZoneAgent
         /// <returns></returns>
         public static byte[] DisplayPing(int clientID,long ping)
         {
-            byte[] packet = new byte[] { 0x66, 0x00, 0x00, 0x00 };
-            packet = CombineByteArray(packet, CreateReverseHexPacket(clientID));
+            byte[] packet = new byte[4];
+            packet = CreateReverseHexPacket(clientID);
             packet = CombineByteArray(packet, new byte[] { 0x03, 0xFF, 0x00, 0x18 });
             packet = CombineByteArray(packet, new byte[] { 0x0C, 0xFF, 0xFF, 0xFF, 0xFF, 0x4E, 0x4F, 0x54, 0x49, 0x43, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
             packet = CombineByteArray(packet, GetBytesFrom("Wz:"+Config.WZ+"  "));
@@ -325,7 +325,10 @@ namespace ZoneAgent
                 packet = CombineByteArray(packet, GetBytesFrom("Ping:"+ping.ToString()+" ms"));
             else
                 packet = CombineByteArray(packet, GetBytesFrom("Ping:---"));
-            packet = CombineByteArray(packet,GetBytesFrom(GetNullString(102-packet.Length)));
+            int MsgLength = packet.Length - 34;
+            MsgLength %= 4;
+            packet = CombineByteArray(packet, GetBytesFrom(GetNullString(4 - MsgLength)));
+            packet = CombineByteArray(CreateReverseHexPacket(packet.Length + 4), packet);
             var tempBytes = Crypt.Encrypt(packet);
             return tempBytes;
             
@@ -413,8 +416,7 @@ namespace ZoneAgent
         /// <returns>byte[] obtained from string data</returns>
         public static byte[] GetBytesFrom(string str)
         {
-            var encoding = new ASCIIEncoding();
-            Byte[] bytes = encoding.GetBytes(str);
+            Byte[] bytes = Encoding.Default.GetBytes(str);
             return bytes;
         }
         /// <summary>
