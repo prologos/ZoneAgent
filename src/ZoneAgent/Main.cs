@@ -16,10 +16,15 @@ namespace ZoneAgent
 {
     public partial class Main : Form
     {
+        public Main()
+        {
+            InitializeComponent();
+        }
+
         #region ini file access
         [DllImport("kernel32")]
         private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
-        
+
         /// <summary>
         /// read the key value in the ini file
         /// </summary>
@@ -34,11 +39,6 @@ namespace ZoneAgent
             return (temp.ToString() != "") ? temp.ToString() : defaultValue;
         }
         #endregion
-        public Main()
-        {
-            InitializeComponent();
-            _Main = this;
-        }
         /// <summary>
         /// Prompts user if user wants to close ZoneAgent or not
         /// if yes program exits else not
@@ -80,7 +80,7 @@ namespace ZoneAgent
             lblserverid.Text = Config.SERVER_ID.ToString();
             lblagentid.Text = Config.AGENT_ID.ToString();
             lblzoneport.Text = Config.ZA_PORT.ToString();
-            new ZoneAgent();
+            new ZoneAgent(this);
         }
 
         /// <summary>

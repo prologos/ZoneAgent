@@ -25,3 +25,12 @@ D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.csprojResolveAssemblyRe
 D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.Main.resources
 D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.Properties.Resources.resources
 D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.csproj.GenerateResource.Cache
+C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.exe.config
+C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.exe
+C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.pdb
+C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.csprojResolveAssemblyReference.cache
+C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.Main.resources
+C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.Properties.Resources.resources
+C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.csproj.GenerateResource.Cache
+C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.exe
+C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.pdb

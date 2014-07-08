@@ -30,6 +30,8 @@ namespace ZoneAgent
         Ping ping;//to ping ip
         PingReply reply;//to get reply of ping
         Random randomId;//to generate random client id initially its temporary and will not be used
+        Main _Main; // Reference of Main class to access objects
+
         /// <summary>
         /// Constructor
         /// Will create instance with specified ip and port
@@ -37,7 +39,7 @@ namespace ZoneAgent
         /// 1)ConnectionStatusChanged when change in connection status
         /// 2)DataReceived when data is received
         /// </summary>
-        public ZoneAgent()
+        public ZoneAgent(Main _Main)
         {
             //For LoginServer
             LS = new EventDrivenTCPClient(Config.LS_IP, Config.LS_PORT);
@@ -72,7 +74,9 @@ namespace ZoneAgent
             PingDisplay.Tick += PingDisplay_Tick;
             PingDisplay.Enabled = true;
             PingDisplay.Start();
-            
+
+            this._Main = _Main;
+
             //Connect to servers one by one
             try
             {
@@ -182,7 +186,7 @@ namespace ZoneAgent
                             Config.PLAYER_COUNT++;
                             if (Config.PLAYER_COUNT > Config.MAX_PLAYER_COUNT) { Config.MAX_PLAYER_COUNT = Config.PLAYER_COUNT; }
                             //player count update
-                            Main._Main.Update_Player_Count();
+                            _Main.Update_Player_Count();
                         }
                         break;
                     case 48://duplicate login ; request DC to ZA from loginserver
@@ -316,7 +320,7 @@ namespace ZoneAgent
                         {
                             Config.PLAYER_COUNT--;
                             //player count update
-                            Main._Main.Update_Player_Count();
+                            _Main.Update_Player_Count();
                             playerinfo.Prepared = false;
                             LS.Send(Packet.SendDCToLS(id, playerinfo.Account, Packet.GetTime()));
                             playerinfo.ZoneStatus = -1;
@@ -503,7 +507,7 @@ namespace ZoneAgent
                         {
                             Config.PLAYER_COUNT--;
                             //player count update
-                            Main._Main.Update_Player_Count();
+                            _Main.Update_Player_Count();
                             var playerinfo = player[client.UniqID];
                             playerinfo.Prepared = false;
                             LS.Send(Packet.SendDCToLS(client.UniqID, playerinfo.Account, Packet.GetTime()));

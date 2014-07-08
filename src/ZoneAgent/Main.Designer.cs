@@ -111,7 +111,7 @@
             // lblconnectedzonecount
             // 
             this.lblconnectedzonecount.AutoSize = true;
-            this.lblconnectedzonecount.Location = new System.Drawing.Point(153, 113);
+            this.lblconnectedzonecount.Location = new System.Drawing.Point(121, 113);
             this.lblconnectedzonecount.Name = "lblconnectedzonecount";
             this.lblconnectedzonecount.Size = new System.Drawing.Size(13, 13);
             this.lblconnectedzonecount.TabIndex = 75;
@@ -122,9 +122,9 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(13, 113);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(135, 13);
+            this.label12.Size = new System.Drawing.Size(107, 13);
             this.label12.TabIndex = 74;
-            this.label12.Text = "Connected Zone Servers  :";
+            this.label12.Text = "Connected Servers  :";
             // 
             // lblzoneport
             // 
