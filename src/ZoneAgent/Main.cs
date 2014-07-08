@@ -10,11 +10,30 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ZoneAgent
 {
     public partial class Main : Form
     {
+        #region ini file access
+        [DllImport("kernel32")]
+        private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
+        
+        /// <summary>
+        /// read the key value in the ini file
+        /// </summary>
+        /// <param name="Section">Section String</param>
+        /// <param name="Key">Key String</param>
+        /// <param name="iniPath">ini File Path String</param>
+        /// <param name="defaultValue">default Return Value String</param>
+        public String GetIniValue(String Section, String Key, String iniPath, String defaultValue = "")
+        {
+            StringBuilder temp = new StringBuilder(255);
+            int i = GetPrivateProfileString(Section, Key, "", temp, 255, iniPath);
+            return (temp.ToString() != "") ? temp.ToString() : defaultValue;
+        }
+        #endregion
         public Main()
         {
             InitializeComponent();
@@ -77,62 +96,27 @@ namespace ZoneAgent
         {
             try
             {
-                StreamReader sr = new StreamReader("SvrInfo.ini");
-                string readLine;
-                string[] splt;
-                while ((readLine = sr.ReadLine()) != null)
-                {
-                    splt = readLine.Split('=');
-                    switch (splt[0])
-                    {
-                        case "SERVERID":
-                            Config.SERVER_ID = Int16.Parse(splt[1]);
-                            break;
-                        case "AGENTID":
-                            Config.AGENT_ID = Int16.Parse(splt[1]);
-                            break;
-                        case "IP"://ZA IP
-                            Config.ZA_IP = IPAddress.Parse(splt[1]);
-                            break;
-                        case "PORT"://ZA port
-                            Config.ZA_PORT = Int16.Parse(splt[1]);
-                            break;
-                        case "ID0"://AS ID
-                            Config.AS_ID = Int16.Parse(splt[1]);
-                            break;
-                        case "IP0"://AS IP
-                            Config.AS_IP = IPAddress.Parse(splt[1]);
-                            break;
-                        case "PORT0"://AS port
-                            Config.AS_PORT = Int16.Parse(splt[1]);
-                            break;
-                        case "ID1"://ZS ID
-                            Config.ZS_ID = Int16.Parse(splt[1]);
-                            break;
-                        case "IP1"://ZS P
-                            Config.ZS_IP = IPAddress.Parse(splt[1]);
-                            break;
-                        case "PORT1"://ZS port
-                            Config.ZS_PORT = Int16.Parse(splt[1]);
-                            break;
-                        case "ID2"://BS ID
-                            Config.BS_ID = Int16.Parse(splt[1]);
-                            break;
-                        case "IP2"://BS IP
-                            Config.BS_IP = IPAddress.Parse(splt[1]);
-                            break;
-                        case "PORT2"://BS port 
-                            Config.BS_PORT = Int16.Parse(splt[1]);
-                            break;
-                        case "IP3"://LS IP
-                            Config.LS_IP = IPAddress.Parse(splt[1]);
-                            break;
-                        case "PORT3"://LS port
-                            Config.LS_PORT = Int16.Parse(splt[1]);
-                            break;
-                    }
-                }
-                sr.Close();
+                string SvrInfo = Directory.GetCurrentDirectory() + @"\\SvrInfo.ini";
+                //ZA
+                Config.SERVER_ID = Int16.Parse(GetIniValue("STARTUP", "SERVERID", SvrInfo, "0"));
+                Config.AGENT_ID = Int16.Parse(GetIniValue("STARTUP", "AGENTID", SvrInfo, "0"));
+                Config.ZA_IP = IPAddress.Parse(GetIniValue("STARTUP", "IP", SvrInfo, "127.0.0.1"));
+                Config.ZA_PORT = Int16.Parse(GetIniValue("STARTUP", "PORT", SvrInfo, "9984"));
+                //LS
+                Config.LS_IP = IPAddress.Parse(GetIniValue("LOGINSERVER", "IP", SvrInfo, "127.0.0.1"));
+                Config.LS_PORT = Int16.Parse(GetIniValue("LOGINSERVER", "PORT", SvrInfo, "3200"));
+                //AS
+                Config.AS_ID = Int16.Parse(GetIniValue("ACCOUNTSERVER", "ID", SvrInfo, "255"));
+                Config.AS_IP = IPAddress.Parse(GetIniValue("ACCOUNTSERVER", "IP", SvrInfo, "127.0.0.1"));
+                Config.AS_PORT = Int16.Parse(GetIniValue("ACCOUNTSERVER", "PORT", SvrInfo, "5589"));
+                //ZS
+                Config.ZS_ID = Int16.Parse(GetIniValue("ZONESERVER", "ID", SvrInfo, "0"));
+                Config.ZS_IP = IPAddress.Parse(GetIniValue("ZONESERVER", "IP", SvrInfo, "127.0.0.1"));
+                Config.ZS_PORT = Int16.Parse(GetIniValue("ZONESERVER", "PORT", SvrInfo, "6689"));
+                //BS
+                Config.BS_ID = Int16.Parse(GetIniValue("BATTLESERVER", "ID", SvrInfo, "3"));
+                Config.BS_IP = IPAddress.Parse(GetIniValue("BATTLESERVER", "IP", SvrInfo, "127.0.0.1"));
+                Config.BS_PORT = Int16.Parse(GetIniValue("BATTLESERVER", "PORT", SvrInfo, "6999"));
             }
             catch (Exception reader)
             {
