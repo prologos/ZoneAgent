@@ -180,6 +180,9 @@ namespace ZoneAgent
                             var accountid = Encoding.ASCII.GetString(packet).Substring(10, 15).Trim().TrimEnd('\0');
                             player.Add(clientid, new PlayerInfo(accountid, Packet.GetTime(), false, -1));
                             Config.PLAYER_COUNT++;
+                            if (Config.PLAYER_COUNT > Config.MAX_PLAYER_COUNT) { Config.MAX_PLAYER_COUNT = Config.PLAYER_COUNT; }
+                            //player count update
+                            Main._Main.Update_Player_Count();
                         }
                         break;
                     case 48://duplicate login ; request DC to ZA from loginserver
@@ -312,6 +315,8 @@ namespace ZoneAgent
                         if (packetList[i][10] == 0x08 && packetList[i][11] == 0x11)
                         {
                             Config.PLAYER_COUNT--;
+                            //player count update
+                            Main._Main.Update_Player_Count();
                             playerinfo.Prepared = false;
                             LS.Send(Packet.SendDCToLS(id, playerinfo.Account, Packet.GetTime()));
                             playerinfo.ZoneStatus = -1;
@@ -497,6 +502,8 @@ namespace ZoneAgent
                         if (player.ContainsKey(client.UniqID))
                         {
                             Config.PLAYER_COUNT--;
+                            //player count update
+                            Main._Main.Update_Player_Count();
                             var playerinfo = player[client.UniqID];
                             playerinfo.Prepared = false;
                             LS.Send(Packet.SendDCToLS(client.UniqID, playerinfo.Account, Packet.GetTime()));
