@@ -327,11 +327,6 @@ namespace ZoneAgent
                 packet = CombineByteArray(packet, GetBytesFrom("Ping:---"));
             packet = CombineByteArray(packet,GetBytesFrom(GetNullString(102-packet.Length)));
             var tempBytes = Crypt.Encrypt(packet);
-            var id = CreateReverseHexPacket(clientID);
-            for (int i = 4; i < 8; i++)
-            {
-                tempBytes[i] = id[i - 4];
-            }
             return tempBytes;
             
         }
