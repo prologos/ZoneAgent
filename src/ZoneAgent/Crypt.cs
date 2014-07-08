@@ -15,7 +15,7 @@ namespace ZoneAgent
         public static byte[] Decrypt(byte[] packet)
         {
             //[0]-[11]: Packet Header
-            for(int i = 12; i < packet.Length; i += 4)
+            for(int i = 12; i + 4 <= packet.Length; i += 4)
             {
                 int DynamicKey = Config.m_DynamicKey;
                 for (int j = i; j < i + 4; j++)
@@ -35,7 +35,7 @@ namespace ZoneAgent
         public static byte[] Encrypt(byte[] packet)
         {
             //[0]-[11]: Packet Header
-            for (int i = 12; i < packet.Length; i += 4)
+            for (int i = 12; i + 4 <= packet.Length; i += 4)
             {
                 int DynamicKey = Config.m_DynamicKey;
                 for (int j = i; j < i + 4; j++)
