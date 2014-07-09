@@ -313,7 +313,10 @@ namespace ZoneAgent
         /// <returns></returns>
         public static byte[] DisplayPing(int clientID,long ping)
         {
-            byte[] packet = new byte[] { 0x1E, 0xB9, 0x41, 0x01, 0x55, 0xBB, 0x4C, 0x9F, 0x7B, 0xAE, 0x2E, 0xB5, 0x0C, 0xFF, 0xFF, 0xFF, 0xFF, 0x4E, 0x4F, 0x54, 0x49, 0x43, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] packet = new byte[4];
+            packet = CreateReverseHexPacket(clientID);
+            packet = CombineByteArray(packet, new byte[] { 0x03, 0xFF, 0x00, 0x18 });
+            packet = CombineByteArray(packet, new byte[] { 0x0C, 0xFF, 0xFF, 0xFF, 0xFF, 0x4E, 0x4F, 0x54, 0x49, 0x43, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
             packet = CombineByteArray(packet, GetBytesFrom("Wz:"+Config.WZ+"  "));
             packet = CombineByteArray(packet, GetBytesFrom("Exp:" + Config.EXP + "  "));
             packet = CombineByteArray(packet, GetBytesFrom("Quest Exp:" + Config.QUEST_EXP + "  "));
@@ -322,13 +325,11 @@ namespace ZoneAgent
                 packet = CombineByteArray(packet, GetBytesFrom("Ping:"+ping.ToString()+" ms"));
             else
                 packet = CombineByteArray(packet, GetBytesFrom("Ping:---"));
-            packet = CombineByteArray(packet,GetBytesFrom(GetNullString(102-packet.Length)));
+            int MsgLength = packet.Length - 34;
+            MsgLength %= 4;
+            packet = CombineByteArray(packet, GetBytesFrom(GetNullString(4 - MsgLength)));
+            packet = CombineByteArray(CreateReverseHexPacket(packet.Length + 4), packet);
             var tempBytes = Crypt.Encrypt(packet);
-            var id = CreateReverseHexPacket(clientID);
-            for (int i = 4; i < 8; i++)
-            {
-                tempBytes[i] = id[i - 4];
-            }
             return tempBytes;
             
         }
@@ -415,8 +416,7 @@ namespace ZoneAgent
         /// <returns>byte[] obtained from string data</returns>
         public static byte[] GetBytesFrom(string str)
         {
-            var encoding = new ASCIIEncoding();
-            Byte[] bytes = encoding.GetBytes(str);
+            Byte[] bytes = Encoding.Default.GetBytes(str);
             return bytes;
         }
         /// <summary>
