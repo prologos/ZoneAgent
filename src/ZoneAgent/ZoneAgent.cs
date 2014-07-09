@@ -528,7 +528,7 @@ namespace ZoneAgent
                         Write(client.TcpClient, Packet.AddClientID(packet, client.UniqID, read));
                         break;
                     case Config.PAYMENT_PACKET:
-                        Write(client.TcpClient, Packet.PivateMessage(client.UniqID,Config.PayMsg));
+                        Write(client.TcpClient, Packet.PrivateMessage(client.UniqID,Config.PayMsg));
                         break;
                 }
                 networkStream.BeginRead(client.Buffer, 0, client.Buffer.Length, OnDataRead, client);

@@ -375,7 +375,7 @@ namespace ZoneAgent
         /// </summary>
         /// <param name="clientID">uniq id of client</param>
         /// <returns>payement information</returns>
-        public static byte[] PivateMessage(int clientID,string message)
+        public static byte[] PrivateMessage(int clientID,string message)
         {
             byte[] packet = new byte[4];
             packet = CreateReverseHexPacket(clientID);
