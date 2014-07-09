@@ -62,20 +62,6 @@ namespace ZoneAgent
                 Logger.Write("ZoneAgent.log", "Stop => File not found SvrInfo.ini");
                 ExitZoneAgent();
             }
-            //Checks if SvrInfo.ini is available or not.If not availabe exits ZoneAgent
-            if (!File.Exists("msvcp100d.dll"))
-            {
-                MessageBox.Show("msvcp100d.dll file missing !!!", "ZoneAgent", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Logger.Write("ZoneAgent.log", "Stop => File not found msvcp100d.dll");
-                ExitZoneAgent();
-            }
-            //Checks if SvrInfo.ini is available or not.If not availabe exits ZoneAgent
-            if (!File.Exists("msvcr100d.dll"))
-            {
-                MessageBox.Show("msvcr100d.dll file missing !!!", "ZoneAgent", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Logger.Write("ZoneAgent.log", "Stop => File not found msvcr100d.dll");
-                ExitZoneAgent();
-            }
             LoadConfig();
             lblserverid.Text = Config.SERVER_ID.ToString();
             lblagentid.Text = Config.AGENT_ID.ToString();
