@@ -234,6 +234,8 @@ namespace ZoneAgent
                 packetType = Config.AS_PACKET;
             else if (packet[10] == 0x02 && packet[11] == 0xA0)//Delete char packet
                 packetType = Config.AS_PACKET;
+            else if (packet[10] == 0x00 && packet[11] == 0xC0)//Payment info packet
+                packetType = Config.PAYMENT_PACKET;
             else if (packet[10] == 0x00 && packet[11] == 0x37)//BattleServer entry Packet
             {
                 playerInformation.ZoneStatus = Config.BS_ID;
@@ -366,34 +368,26 @@ namespace ZoneAgent
                 j++;
 
             }
-            /*
-            string temp = status;
-            string wz = "";
-            int i = temp.IndexOf('[');
-            int j = temp.IndexOf(']');
-            wz+="-"+temp.Substring(i+1,(j-i)-1).Trim();
-            i++;
-            j++;
-            i = temp.IndexOf('[',i);
-            j = temp.IndexOf(']',j);
-            wz += "-" + temp.Substring(i + 1, (j - i)-1).Trim();
-            i++;
-            j++;
-            i = temp.IndexOf('[',i);
-            j = temp.IndexOf(']',j);
-            wz += "-" + temp.Substring(i + 1, (j - i)-1).Trim();
-            i++;
-            j++;
-            i = temp.IndexOf('[',i);
-            j = temp.IndexOf(']',j);
-            wz += "-" + temp.Substring(i + 1, (j - i)-1).Trim();
-            StreamWriter s = new StreamWriter("chktest");
-            s.WriteLine(wz);
-            s.Close();
-            Config.WZ = status.Substring(42, 5);
-            Config.EXP = status.Substring(55, 5);
-            Config.QUEST_EXP = status.Substring(74, 5);
-            Config.DROP_RATE = status.Substring(93, 5);*/
+        }
+
+        /// <summary>
+        /// Payement information when client clicks Check Payment Info.
+        /// </summary>
+        /// <param name="clientID">uniq id of client</param>
+        /// <returns>payement information</returns>
+        public static byte[] PivateMessage(int clientID,string message)
+        {
+            byte[] packet = new byte[4];
+            packet = CreateReverseHexPacket(clientID);
+            packet = CombineByteArray(packet, new byte[] { 0x03, 0xFF, 0x00, 0x18 });
+            packet = CombineByteArray(packet, new byte[] { 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4D, 0x00, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0x00 });
+            packet = CombineByteArray(packet, GetBytesFrom(message));
+            int MsgLength = packet.Length - 34;
+            MsgLength %= 4;
+            packet = CombineByteArray(packet, GetBytesFrom(GetNullString(4 - MsgLength)));
+            packet = CombineByteArray(CreateReverseHexPacket(packet.Length + 4), packet);
+            var tempBytes = Crypt.Encrypt(packet);
+            return tempBytes;
         }
 
         /// <summary>
