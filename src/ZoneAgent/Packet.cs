@@ -473,5 +473,14 @@ namespace ZoneAgent
             }
             return newPacket;
         }
+        public static byte[] DuplicateUserDCPacket(byte[] packet)
+        {
+            packet[8] = 0x02;
+            packet[9] = 0xE2;
+            var tempByte = new byte[32];
+            Array.Copy(packet, 0, tempByte, 0, 32);
+            tempByte = CombineByteArray(tempByte, GetBytesFrom(GetTime()));
+            return tempByte;
+        }
     }
 }
