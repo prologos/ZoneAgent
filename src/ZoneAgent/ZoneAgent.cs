@@ -190,12 +190,25 @@ namespace ZoneAgent
                         var ClientID = Packet.GetClientId(tempByte);
                         if (player.ContainsKey(ClientID))
                         {
+                            foreach (var client in clients)
+                            {
+                                if (client.UniqID == ClientID)
+                                {
+                                    client.TcpClient.GetStream().Close();
+                                }
+                            }
+
+                            LS.Send(Packet.DuplicateUserDCPacket(packet));
+                            if (player[ClientID].ZoneStatus == Config.ZS_ID)
+                            {
+                                ZS.Send(Packet.SendDCToASZS(ClientID));
+                            }
+                            else if(player[ClientID].ZoneStatus == Config.BS_ID)
+                            {
+                                BS.Send(Packet.SendDCToASZS(ClientID));
+                            }
                             player.Remove(ClientID);
-                            LS.Send(Packet.TrimPacket(packet, 48));
                         }
-                        LS.Send(Packet.TrimPacket(packet, 48));
-                        //Logger.WriteTransactionLog(Encoding.ASCII.GetString(packet).Substring(11).Trim() + " duplicate login!");
-                        // TODO: Send DC to client
                         break;
                     default://if any other packet received
                         Logger.WriteBytes(Logger.GetLoggerFileName("LSNEW"), packet);
