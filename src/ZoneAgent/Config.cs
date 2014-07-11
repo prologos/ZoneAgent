@@ -8,6 +8,8 @@ namespace ZoneAgent
     /// </summary>
     class Config
     {
+        public static int GMShout_count;
+        public static string[] GMShout_list;
         //packet encrypt/decrypt Key Number
         public static int m_ConstKey1 = 2366183;
         public static int m_ConstKey2 = 1432754;

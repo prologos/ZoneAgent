@@ -93,26 +93,13 @@ namespace ZoneAgent
         public static byte[] AlterAccountServerPacket(byte[] packet)
         {
             var tempbytes = Crypt.Decrypt(packet);
-            tempbytes[35] = tempbytes[34];
-            tempbytes[34] = tempbytes[33];
-            tempbytes[33] = Convert.ToByte(1);
-            tempbytes[32] = 0x00;
-            tempbytes[223] = tempbytes[222];
-            tempbytes[222] = tempbytes[221];
-            tempbytes[221] = Convert.ToByte(1);
-            tempbytes[220] = 0x00;
-            tempbytes[411] = tempbytes[410];
-            tempbytes[410] = tempbytes[409];
-            tempbytes[409] = Convert.ToByte(1);
-            tempbytes[408] = 0x00;
-            tempbytes[599] = tempbytes[598];
-            tempbytes[598] = tempbytes[597];
-            tempbytes[597] = Convert.ToByte(1);
-            tempbytes[596] = 0x00;
-            tempbytes[787] = tempbytes[786];
-            tempbytes[786] = tempbytes[785];
-            tempbytes[785] = Convert.ToByte(1);
-            tempbytes[784] = 0x00;
+            for (int i = 32; i <= 784; i += 188)
+            {
+                tempbytes[i + 3] = tempbytes[i + 2];
+                tempbytes[i + 2] = tempbytes[i + 1];
+                tempbytes[i + 1] = Convert.ToByte(1);
+                tempbytes[i] = 0x00;
+            }
             return Crypt.Encrypt(tempbytes);
         }
 

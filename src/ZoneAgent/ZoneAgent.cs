@@ -28,6 +28,7 @@ namespace ZoneAgent
         PingReply reply;//to get reply of ping
         Random randomId;//to generate random client id initially its temporary and will not be used
         Main _Main; // Reference of Main class to access objects
+        public static Timer GMShout;
 
         /// <summary>
         /// Constructor
@@ -71,6 +72,8 @@ namespace ZoneAgent
             PingDisplay.Start();
 
             this._Main = _Main;
+            GMShout = new Timer();
+            GMShout.Tick += GMShout_Tick;
 
             //Connect to servers one by one
             try
@@ -579,6 +582,30 @@ namespace ZoneAgent
             catch (Exception writeCallBack)
             {
                 Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "WriteCallBack : " + writeCallBack);
+            }
+        }
+        /// <summary>
+        /// Send a GM message to the user connection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void GMShout_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (var client in clients)
+                {
+                    if (player[client.UniqID].ZoneStatus == Config.ZS_ID || player[client.UniqID].ZoneStatus == Config.BS_ID)
+                    {
+                        Write(client.TcpClient, Packet.PrivateMessage(client.UniqID, Config.GMShout_list[Config.GMShout_count]));
+                    }
+                }
+                Config.GMShout_count++;
+                if (Config.GMShout_count >= Config.GMShout_list.Length - 1) { Config.GMShout_count = 0; }
+                _Main.Show_Next_ShoutMsg(Config.GMShout_list[Config.GMShout_count]);
+            }
+            catch
+            {
             }
         }
     }

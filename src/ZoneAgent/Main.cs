@@ -165,5 +165,67 @@ namespace ZoneAgent
         {
             Logger.Write("ZoneAgent.log", "Stop => Closed");
         }
+        /// <summary>
+        /// GMShout Start
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists("gmshouts.txt"))
+            {
+                this.next_msg.Text = "gmshouts.txt does not exist.";
+                return;
+            }
+            if (this.button2.Text == "Start")
+            {
+                this.shout_interval.ReadOnly = true;
+                //Load shouts file to array
+                Config.GMShout_list = File.ReadLines("gmshouts.txt", System.Text.Encoding.Default).ToArray();
+                Config.GMShout_count = 0;
+                this.next_msg.Text = Config.GMShout_list[0];
+                //Timer Start
+                ZoneAgent.GMShout.Interval = Convert.ToInt32(this.shout_interval.Text);
+                ZoneAgent.GMShout.Start();
+            }
+            else
+            {
+                this.shout_interval.ReadOnly = false;
+                this.next_msg.Text = "Stopped Shout";
+                //Timer Stop
+                ZoneAgent.GMShout.Stop();
+            }
+            this.button2.Text = this.button2.Text == "Start" ? "Stop" : "Start";
+        }
+        /// <summary>
+        /// GMShout Reload
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists("gmshouts.txt"))
+            {
+                this.next_msg.Text = "gmshouts.txt does not exist.";
+                return;
+            }
+            //Load shouts file to array
+            Config.GMShout_list = File.ReadLines("gmshouts.txt", System.Text.Encoding.Default).ToArray();
+            Config.GMShout_count = 0;
+            this.next_msg.Text = Config.GMShout_list[0];
+        }
+        /// <summary>
+        /// Change GMShout Next Message
+        /// </summary>
+        /// <param name="log"></param>
+        public void Show_Next_ShoutMsg(string log)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(Show_Next_ShoutMsg), new object[] { log });
+                return;
+            }
+            this.next_msg.Text = log;
+        }
     }
 }
