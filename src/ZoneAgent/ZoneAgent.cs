@@ -29,7 +29,7 @@ namespace ZoneAgent
         Random randomId;//to generate random client id initially its temporary and will not be used
         Main _Main; // Reference of Main class to access objects
         public static Timer GMShout; //timer to send GM messages
-        Button ShoutManually;
+        Button ShoutManually; //Button created run time
 
         /// <summary>
         /// Constructor
@@ -72,16 +72,20 @@ namespace ZoneAgent
             PingDisplay.Enabled = true;
             PingDisplay.Start();
 
-            this._Main = _Main;
+            this._Main = _Main; // Taking refrence of main form
+
+            //timer to send messages to client
             GMShout = new Timer();
             GMShout.Tick += GMShout_Tick;
 
+            //Button created runtime to send custom messages to client
             ShoutManually = new Button();
             ShoutManually.Size = new System.Drawing.Size(243, 27);
             ShoutManually.Text = "Shout Manually";
             ShoutManually.Location = new System.Drawing.Point(12, 325);
             ShoutManually.Click += ShoutManually_Click;
-            _Main.Controls.Add(ShoutManually);
+
+            _Main.Controls.Add(ShoutManually); //adding control i.e button on form
 
             //Connect to servers one by one
             try
@@ -98,12 +102,17 @@ namespace ZoneAgent
             }
         }
 
+        /// <summary>
+        /// Will be executed when ShoutManually button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void ShoutManually_Click(object sender, EventArgs e)
         {
             SendMessage(_Main.manual_msg.Text);
         }
         /// <summary>
-        /// Will display ping to every player refresh time 10 seconds
+        /// Will display ping to every player refresh time 7 seconds
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -151,6 +160,10 @@ namespace ZoneAgent
                 Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "GM Message : " + gmMessages);
             }
         }
+        /// <summary>
+        /// will send given message to all clients
+        /// </summary>
+        /// <param name="message">message</param>
         void SendMessage(string message)
         {
             foreach (var client in clients)
@@ -161,6 +174,11 @@ namespace ZoneAgent
                 }
             }
         }
+        /// <summary>
+        /// Will send Report packet to LoginServer at interval
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void LSReporter_Tick(object sender, EventArgs e)
         {
             try
