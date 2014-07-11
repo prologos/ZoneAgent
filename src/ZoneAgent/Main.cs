@@ -170,14 +170,14 @@ namespace ZoneAgent
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button2_Click(object sender, EventArgs e)
+        private void btnStart_Click(object sender, EventArgs e)
         {
             if (!File.Exists("gmshouts.txt"))
             {
                 this.next_msg.Text = "gmshouts.txt does not exist.";
                 return;
             }
-            if (this.button2.Text == "Start")
+            if (this.btnStart.Text == "Start")
             {
                 this.shout_interval.ReadOnly = true;
                 //Load shouts file to array
@@ -195,14 +195,14 @@ namespace ZoneAgent
                 //Timer Stop
                 ZoneAgent.GMShout.Stop();
             }
-            this.button2.Text = this.button2.Text == "Start" ? "Stop" : "Start";
+            this.btnStart.Text = this.btnStart.Text == "Start" ? "Stop" : "Start";
         }
         /// <summary>
         /// GMShout Reload
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void btnReload_Click(object sender, EventArgs e)
         {
             if (!File.Exists("gmshouts.txt"))
             {

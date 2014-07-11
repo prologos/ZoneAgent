@@ -28,7 +28,8 @@ namespace ZoneAgent
         PingReply reply;//to get reply of ping
         Random randomId;//to generate random client id initially its temporary and will not be used
         Main _Main; // Reference of Main class to access objects
-        public static Timer GMShout;
+        public static Timer GMShout; //timer to send GM messages
+        Button ShoutManually;
 
         /// <summary>
         /// Constructor
@@ -75,6 +76,13 @@ namespace ZoneAgent
             GMShout = new Timer();
             GMShout.Tick += GMShout_Tick;
 
+            ShoutManually = new Button();
+            ShoutManually.Size = new System.Drawing.Size(243, 27);
+            ShoutManually.Text = "Shout Manually";
+            ShoutManually.Location = new System.Drawing.Point(12, 325);
+            ShoutManually.Click += ShoutManually_Click;
+            _Main.Controls.Add(ShoutManually);
+
             //Connect to servers one by one
             try
             {
@@ -88,6 +96,11 @@ namespace ZoneAgent
             {
                 Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "Connect : " + connect.ToString());
             }
+        }
+
+        void ShoutManually_Click(object sender, EventArgs e)
+        {
+            SendMessage(_Main.manual_msg.Text);
         }
         /// <summary>
         /// Will display ping to every player refresh time 10 seconds
@@ -119,6 +132,35 @@ namespace ZoneAgent
             }
         }
 
+        /// <summary>
+        /// Send a GM message to the user connection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void GMShout_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                SendMessage(Config.GMShout_list[Config.GMShout_count]);
+                Config.GMShout_count++;
+                if (Config.GMShout_count >= Config.GMShout_list.Length - 1) { Config.GMShout_count = 0; }
+                _Main.Show_Next_ShoutMsg(Config.GMShout_list[Config.GMShout_count]);
+            }
+            catch (Exception gmMessages)
+            {
+                Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "GM Message : " + gmMessages);
+            }
+        }
+        void SendMessage(string message)
+        {
+            foreach (var client in clients)
+            {
+                if (player[client.UniqID].ZoneStatus == Config.ZS_ID || player[client.UniqID].ZoneStatus == Config.BS_ID)
+                {
+                    Write(client.TcpClient, Packet.PrivateMessage(client.UniqID, message));
+                }
+            }
+        }
         void LSReporter_Tick(object sender, EventArgs e)
         {
             try
@@ -584,29 +626,7 @@ namespace ZoneAgent
                 Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "WriteCallBack : " + writeCallBack);
             }
         }
-        /// <summary>
-        /// Send a GM message to the user connection
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void GMShout_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                foreach (var client in clients)
-                {
-                    if (player[client.UniqID].ZoneStatus == Config.ZS_ID || player[client.UniqID].ZoneStatus == Config.BS_ID)
-                    {
-                        Write(client.TcpClient, Packet.PrivateMessage(client.UniqID, Config.GMShout_list[Config.GMShout_count]));
-                    }
-                }
-                Config.GMShout_count++;
-                if (Config.GMShout_count >= Config.GMShout_list.Length - 1) { Config.GMShout_count = 0; }
-                _Main.Show_Next_ShoutMsg(Config.GMShout_list[Config.GMShout_count]);
-            }
-            catch
-            {
-            }
-        }
+
+        
     }
 }
