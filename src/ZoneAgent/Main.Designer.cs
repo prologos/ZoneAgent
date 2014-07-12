@@ -32,7 +32,6 @@ namespace ZoneAgent
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.label4 = new System.Windows.Forms.Label();
             this.btnclose = new System.Windows.Forms.Button();
-            this.zonelog = new System.Windows.Forms.RichTextBox();
             this.lbllssockstatus = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.lstzone = new System.Windows.Forms.ListBox();
@@ -60,6 +59,7 @@ namespace ZoneAgent
             this.btnStart = new System.Windows.Forms.Button();
             this.manual_msg = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.zonelog = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // label4
@@ -81,14 +81,6 @@ namespace ZoneAgent
             this.btnclose.Text = "Close";
             this.btnclose.UseVisualStyleBackColor = true;
             this.btnclose.Click += new System.EventHandler(this.btnclose_Click);
-            // 
-            // zonelog
-            // 
-            this.zonelog.Location = new System.Drawing.Point(14, 388);
-            this.zonelog.Name = "zonelog";
-            this.zonelog.Size = new System.Drawing.Size(239, 82);
-            this.zonelog.TabIndex = 79;
-            this.zonelog.Text = "";
             // 
             // lbllssockstatus
             // 
@@ -330,12 +322,21 @@ namespace ZoneAgent
             this.label11.Text = "---------------------------------------------------------------------------------" +
     "------";
             // 
+            // zonelog
+            // 
+            this.zonelog.FormattingEnabled = true;
+            this.zonelog.Location = new System.Drawing.Point(17, 387);
+            this.zonelog.Name = "zonelog";
+            this.zonelog.Size = new System.Drawing.Size(235, 82);
+            this.zonelog.TabIndex = 94;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(267, 505);
+            this.Controls.Add(this.zonelog);
             this.Controls.Add(this.manual_msg);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.btnReload);
@@ -352,7 +353,6 @@ namespace ZoneAgent
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnclose);
-            this.Controls.Add(this.zonelog);
             this.Controls.Add(this.lbllssockstatus);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.lstzone);
@@ -381,7 +381,6 @@ namespace ZoneAgent
 
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnclose;
-        private System.Windows.Forms.RichTextBox zonelog;
         public System.Windows.Forms.Label lbllssockstatus;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ListBox lstzone;
@@ -409,6 +408,7 @@ namespace ZoneAgent
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Label label11;
         public System.Windows.Forms.TextBox manual_msg;
+        public System.Windows.Forms.ListBox zonelog;
     }
 }
 

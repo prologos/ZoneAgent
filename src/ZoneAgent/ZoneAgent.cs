@@ -374,8 +374,11 @@ namespace ZoneAgent
             {
                 var packet = (byte[])Convert.ChangeType(data, typeof(byte[]));
                 //File.WriteAllBytes("OGZS_" + Environment.TickCount + "_" + packet.Length, packet);
+                Application.DoEvents();
                 var packetList = new List<byte[]>();
+                Application.DoEvents();
                 packetList.Clear();
+                Application.DoEvents();
                 Packet.SplitPackets(packet, packet.Length, ref packetList);
                 foreach (var t in packetList)
                 {

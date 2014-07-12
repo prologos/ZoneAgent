@@ -1,0 +1,6 @@
+[2014/7/11-22:44:45] OnDataRead : System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host. ---> System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host
+   at System.Net.Sockets.Socket.EndReceive(IAsyncResult asyncResult)
+   at System.Net.Sockets.NetworkStream.EndRead(IAsyncResult asyncResult)
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.NetworkStream.EndRead(IAsyncResult asyncResult)
+   at ZoneAgent.ZoneAgent.OnDataRead(IAsyncResult asyncResult) in d:\A3 Source\ZoneAgent\src\ZoneAgent\ZoneAgent.cs:line 526

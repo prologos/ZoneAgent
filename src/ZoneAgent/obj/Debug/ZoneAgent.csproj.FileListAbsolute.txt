@@ -28,7 +28,6 @@ C:\Users\Soul\Documents\GitHub\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.pdb
 D:\A3 Source\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.exe.config
 D:\A3 Source\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.exe
 D:\A3 Source\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.pdb
-D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.csprojResolveAssemblyReference.cache
 D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.Main.resources
 D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.Properties.Resources.resources
 D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.csproj.GenerateResource.Cache
