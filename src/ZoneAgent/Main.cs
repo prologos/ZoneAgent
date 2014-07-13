@@ -227,5 +227,19 @@ namespace ZoneAgent
             }
             this.next_msg.Text = log;
         }
+        /// <summary>
+        /// Update zonelog
+        /// </summary>
+        public void Update_zonelog(string log)
+        {
+            if (this.noRefresh.Checked) return;
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(Update_zonelog), new object[] { log });
+                return;
+            }
+            zonelog.AppendText(log + Environment.NewLine);
+            zonelog.ScrollToCaret();
+        }
     }
 }
