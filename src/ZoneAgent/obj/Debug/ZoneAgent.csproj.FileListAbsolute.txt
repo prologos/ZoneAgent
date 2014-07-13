@@ -33,3 +33,12 @@ D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.Properties.Resources.re
 D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.csproj.GenerateResource.Cache
 D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.exe
 D:\A3 Source\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.pdb
+D:\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.csprojResolveAssemblyReference.cache
+D:\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.Main.resources
+D:\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.Properties.Resources.resources
+D:\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.csproj.GenerateResource.Cache
+D:\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.exe.config
+D:\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.exe
+D:\ZoneAgent\src\ZoneAgent\bin\Debug\ZoneAgent.pdb
+D:\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.exe
+D:\ZoneAgent\src\ZoneAgent\obj\Debug\ZoneAgent.pdb
