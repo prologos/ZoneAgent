@@ -46,7 +46,7 @@ namespace ZoneAgent
             LS.DataReceived += LS_DataReceived;
             //For AccountServer
             AS = new EventDrivenTCPClient(Config.AS_IP, Config.AS_PORT);
-            AS.DataReceived += AS_DataReceived;
+            AS.DataReceived += ZS_DataReceived;
             AS.ConnectionStatusChanged += AS_ConnectionStatusChanged;
             //For ZoneServer
             ZS = new EventDrivenTCPClient(Config.ZS_IP, Config.ZS_PORT);
@@ -54,7 +54,7 @@ namespace ZoneAgent
             ZS.ConnectionStatusChanged += ZS_ConnectionStatusChanged;
             //For BattleServer
             BS = new EventDrivenTCPClient(Config.BS_IP, Config.BS_PORT);
-            BS.DataReceived += BS_DataReceived;
+            BS.DataReceived += ZS_DataReceived;
             BS.ConnectionStatusChanged += BS_ConnectionStatusChanged;
 
             clients = new List<Client>();//initializing list of clients
@@ -245,6 +245,8 @@ namespace ZoneAgent
                             if (Config.PLAYER_COUNT > Config.MAX_PLAYER_COUNT) { Config.MAX_PLAYER_COUNT = Config.PLAYER_COUNT; }
                             //player count update
                             _Main.Update_Player_Count();
+                            //zonelog update
+                            _Main.Update_zonelog("<LC> UID = " + clientid.ToString() + " " + accountid + " Prepared");
                         }
                         break;
                     case 48://duplicate login ; request DC to ZA from loginserver
@@ -306,40 +308,6 @@ namespace ZoneAgent
             }
         }
         /// <summary>
-        /// AccountServer Data Received methd
-        /// Will be executed when data is received from AccountServer
-        /// </summary>
-        /// <param name="sender">EventDrivenTCPClient object</param>
-        /// <param name="data">byte[] data</param>
-        void AS_DataReceived(EventDrivenTCPClient sender, object data)
-        {
-            try
-            {
-                var packet = (byte[])Convert.ChangeType(data, typeof(byte[]));
-                //File.WriteAllBytes("AS_" + Environment.TickCount + "_" + packet.Length, packet);
-                var temp = new byte[4];
-                Array.Copy(packet, 4, temp, 0, 4);
-                var id = Packet.GetClientId(temp);
-                if (player.ContainsKey(id))
-                {
-                    var playerinfo = player[id];
-                    switch (packet.Length)
-                    {
-                        case 952://chacater packet received from AccountServer(.acl file)
-                            Write(playerinfo.Client.TcpClient, Packet.AlterAccountServerPacket(packet));
-                            break;
-                        default://other byte size packet received
-                            Write(playerinfo.Client.TcpClient, packet);
-                            break;
-                    }
-                }
-            }
-            catch (Exception ASDataArrival)
-            {
-                Logger.Write(Logger.GetLoggerFileName("AccountServer"), "AccountServer DataReceived : "+ASDataArrival);
-            }
-        }
-        /// <summary>
         /// ZoneServer connection Status Change event method
         /// Executed when status of connection to ZoneServer is changed
         /// </summary>
@@ -389,30 +357,55 @@ namespace ZoneAgent
                     {
                         var playerinfo = player[id];
                         //Below condition is for disconneting client or reconnecting client
-                        if (t[10] == 0x08 && t[11] == 0x11)
+                        if (playerinfo.ZoneStatus == Config.AS_ID)
                         {
-                            Config.PLAYER_COUNT--;
-                            //player count update
-                            _Main.Update_Player_Count();
-                            playerinfo.Prepared = false;
-                            LS.Send(Packet.SendDCToLS(id, playerinfo.Account, Packet.GetTime()));
-                            playerinfo.ZoneStatus = -1;
-                            ZS.Send(Packet.SendDCToASZS(id));
-                            player.Remove(id);
-                            if (clients.Contains(playerinfo.Client))
+                            if (t.Length == 952)
                             {
-                                lock (clients)
-                                {
-                                    clients.Remove(playerinfo.Client);
-                                }
+                                Write(playerinfo.Client.TcpClient, Packet.AlterAccountServerPacket(t));
+                            }
+                            else
+                            {
+                                Write(playerinfo.Client.TcpClient, t);
                             }
                         }
-                        //Below condition is to reduce chance of other packets come under same conditions
-                        Write(playerinfo.Client.TcpClient, t);
-                        if (t[10] == 0x00 && t[11] == 0x18 && t[12] == 0x74 && t[13] == 0xCE && t[14] == 0xCA && t[15] == 0xE9 && t[16] == 0x87 && t[17] == 0x7F && t[18] == 0xAB)
+                        else
                         {
-                            var tempPacket = t;
-                            Packet.SetStatusValues(tempPacket);
+                            //Below condition is for disconneting client or reconnecting client
+                            if (t.Length > 11 && t[10] == 0x08 && t[11] == 0x11)
+                            {
+                                Config.PLAYER_COUNT--;
+                                //player count update
+                                _Main.Update_Player_Count();
+                                //zonelog update
+                                _Main.Update_zonelog("<LC> UID = " + id + " " + playerinfo.Account + " User Left");
+
+                                playerinfo.Prepared = false;
+                                LS.Send(Packet.SendDCToLS(id, playerinfo.Account, Packet.GetTime()));
+                                playerinfo.ZoneStatus = -1;
+                                ZS.Send(Packet.SendDCToASZS(id));
+                                player.Remove(id);
+                                if (clients.Contains(playerinfo.Client))
+                                {
+                                    lock (clients)
+                                    {
+                                        clients.Remove(playerinfo.Client);
+                                    }
+                                }
+                            }
+                            //Below condition is to reduce chance of other packets come under same conditions
+                            Write(playerinfo.Client.TcpClient, t);
+                            if (t.Length > 18 && t[10] == 0x00 && t[11] == 0x18 && t[12] == 0x74 && t[13] == 0xCE && t[14] == 0xCA && t[15] == 0xE9 && t[16] == 0x87 && t[17] == 0x7F && t[18] == 0xAB)
+                            {
+                                var tempPacket = t;
+                                Packet.SetStatusValues(tempPacket);
+                            }
+                        }
+                        //Zone changed Packet : ZoneStatus Change
+                        if (t.Length == 11 && t[8] == 0x01 && t[9] == 0xE1)
+                        {
+                            //zonelog update
+                            _Main.Update_zonelog(playerinfo.Account + " (" + id + ") user zone changed " + playerinfo.ZoneStatus + " -> " + t[10]);
+                            playerinfo.ZoneStatus = t[10];
                         }
                     }
                 }
@@ -442,38 +435,6 @@ namespace ZoneAgent
                 if (Config.isBSConnected)
                     Logger.Write("BattleServer.log", "BattleServer Disonnected");
                 Config.isBSConnected = false;
-            }
-        }
-        /// <summary>
-        /// BattleServer Data Received method
-        /// Will be executed when data is received from BattleServer
-        /// </summary>
-        /// <param name="sender">EventDrivenTCPClient object</param>
-        /// <param name="data">byte[] data</param>
-        void BS_DataReceived(EventDrivenTCPClient sender, object data)
-        {
-            try
-            {
-                var packet = (byte[])Convert.ChangeType(data, typeof(byte[]));
-                //File.WriteAllBytes("OGZS_" + Environment.TickCount + "_" + packet.Length, packet);
-                var packetList = new List<byte[]>();
-                packetList.Clear();
-                Packet.SplitPackets(packet, packet.Length, ref packetList);
-                foreach (var t in packetList)
-                {
-                    var temp = new byte[4];
-                    Array.Copy(t, 4, temp, 0, 4);
-                    int id = Packet.GetClientId(temp);
-                    if (player.ContainsKey(id))
-                    {
-                        var playerinfo = player[id];
-                        Write(playerinfo.Client.TcpClient, t);
-                    }
-                }
-            }
-            catch (Exception BSDataArrival)
-            {
-                Logger.Write(Logger.GetLoggerFileName("BattleServer"), "BattleServer DataReceived : " + BSDataArrival.ToString());
             }
         }
         /// <summary>
@@ -556,6 +517,8 @@ namespace ZoneAgent
                             playerInfo.ZoneStatus = Config.AS_ID;
                             playerInfo.Client = client;
                             LS.Send(Packet.CreateClientStatusPacket(clientId, playerInfo.Account));
+                            //zonelog update
+                            _Main.Update_zonelog(playerInfo.Account + "(" + newClientEp.Address.ToString() + ") User Joined");
                             var character = Packet.CreateGetCharacterPacket(clientId, playerInfo.Account, newClientEp.Address.ToString());
                             AS.Send(character);
                         }
@@ -578,6 +541,8 @@ namespace ZoneAgent
                             var playerinfo = player[client.UniqID];
                             playerinfo.Prepared = false;
                             LS.Send(Packet.SendDCToLS(client.UniqID, playerinfo.Account, Packet.GetTime()));
+                            //zonelog update
+                            _Main.Update_zonelog("<LC> UID = " + client.UniqID + " " + playerinfo.Account + " User Left");
                             if (playerinfo.ZoneStatus==Config.ZS_ID)
                             {
                                 //to disconnect from zoneserver

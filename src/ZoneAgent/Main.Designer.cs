@@ -60,6 +60,7 @@ namespace ZoneAgent
             this.manual_msg = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.zonelog = new System.Windows.Forms.ListBox();
+	    this.noRefresh = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label4
@@ -329,6 +330,18 @@ namespace ZoneAgent
             this.zonelog.Name = "zonelog";
             this.zonelog.Size = new System.Drawing.Size(235, 82);
             this.zonelog.TabIndex = 94;
+	    // 
+            // noRefresh
+            // 
+            this.noRefresh.AutoSize = true;
+            this.noRefresh.Checked = true;
+            this.noRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.noRefresh.Location = new System.Drawing.Point(19, 440);
+            this.noRefresh.Name = "noRefresh";
+            this.noRefresh.Size = new System.Drawing.Size(87, 16);
+            this.noRefresh.TabIndex = 95;
+            this.noRefresh.Text = "No Refresh";
+            this.noRefresh.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
@@ -336,6 +349,7 @@ namespace ZoneAgent
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(267, 505);
+	    this.Controls.Add(this.noRefresh);
             this.Controls.Add(this.zonelog);
             this.Controls.Add(this.manual_msg);
             this.Controls.Add(this.btnStart);
@@ -409,6 +423,7 @@ namespace ZoneAgent
         private System.Windows.Forms.Label label11;
         public System.Windows.Forms.TextBox manual_msg;
         public System.Windows.Forms.ListBox zonelog;
+	private System.Windows.Forms.CheckBox noRefresh;
     }
 }
 

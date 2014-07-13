@@ -211,11 +211,9 @@ namespace ZoneAgent
                 packetType = Config.AS_PACKET;
             else if (packet[10] == 0x23 && packet[11] == 0x23)//For KH Crest
                 packetType = Config.AS_PACKET;
-            else if (packet[10] == 0x07 && packet[11] == 0x11)//ZoneServer entry packet
-                playerInformation.ZoneStatus = Config.ZS_ID;
             else if (packet[10] == 0x08 && packet[11] == 0x11)//Disconnet Packet from ZS
                 packetType = Config.DISCONNECT_PACKET;
-            else if (packet[10] == 0x1B && packet[11] == 0x50)//Disconnet Packet from BS
+            else if (packet[10] == 0x1B && packet[11] == 0x50 && playerInformation.ZoneStatus == Config.BS_ID)//Disconnet Packet from BS
                 packetType = Config.DISCONNECT_PACKET;
             else if (packet[10] == 0x01 && packet[11] == 0xA0)//Create char packet
                 packetType = Config.AS_PACKET;
@@ -224,15 +222,9 @@ namespace ZoneAgent
             else if (packet[10] == 0x00 && packet[11] == 0xC0)//Payment info packet
                 packetType = Config.PAYMENT_PACKET;
             else if (packet[10] == 0x00 && packet[11] == 0x37)//BattleServer entry Packet
-            {
-                playerInformation.ZoneStatus = Config.BS_ID;
                 packetType = Config.BS_PACKET;
-            }
             else if (packet[10] == 0x01 && packet[11] == 0x35)//BattleServer exit Packet
-            {
-                playerInformation.ZoneStatus = Config.ZS_ID;
                 packetType = Config.ZS_PACKET;
-            }
             return packetType;
         }
         /// <summary>
