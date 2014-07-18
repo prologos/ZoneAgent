@@ -69,11 +69,12 @@ namespace ZoneAgent
         public static string GetCharName(byte[] packet, int index)
         {
             string character = "";
-            while (packet[index] != '\0')
+            int count = 0;
+            while (packet[index + count] != '\0')
             {
-                character += ((char)packet[index]).ToString();
-                index++;
+                count++;
             }
+            character = Encoding.Default.GetString(packet, index, count);
             return character;
         }
         /// <summary>
