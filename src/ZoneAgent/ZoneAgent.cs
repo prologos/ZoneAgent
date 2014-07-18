@@ -255,14 +255,23 @@ namespace ZoneAgent
                         var ClientID = Packet.GetClientId(tempByte);
                         if (player.ContainsKey(ClientID))
                         {
-                            foreach (var client in clients)
+                            for (int i = clients.Count - 1; i >= 0; i--)
                             {
-                                if (client.UniqID == ClientID)
+                                if (clients[i].UniqID == ClientID)
                                 {
-                                    client.TcpClient.GetStream().Close();
+                                    lock (clients)
+                                    {
+                                        clients[i].TcpClient.GetStream().Close();
+                                        clients.Remove(player[ClientID].Client);
+                                    }
+                                    break;
                                 }
                             }
-
+                            Config.PLAYER_COUNT--;
+                            //player count update
+                            _Main.Update_Player_Count();
+                            //zonelog update
+                            _Main.Update_zonelog("<LC> UID = " + ClientID.ToString() + " Dropped, Reason = Duplicate login");
                             LS.Send(Packet.DuplicateUserDCPacket(packet));
                             if (player[ClientID].ZoneStatus == Config.ZS_ID)
                             {
