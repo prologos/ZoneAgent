@@ -379,8 +379,9 @@ namespace ZoneAgent
                         }
                         else
                         {
+                            Write(playerinfo.Client.TcpClient, t);
                             //Below condition is for disconneting client or reconnecting client
-                            if (t.Length > 11 && t[10] == 0x08 && t[11] == 0x11)
+                            if (t.Length == 12 && t[10] == 0x08 && t[11] == 0x11)
                             {
                                 Config.PLAYER_COUNT--;
                                 //player count update
@@ -401,9 +402,13 @@ namespace ZoneAgent
                                     }
                                 }
                             }
+                            //Set Character Name
+                            else if (t.Length == 39 && t[10] == 0x06 && t[11] == 0x11)
+                            {
+                                playerinfo.CharName = Packet.GetCharName(Crypt.Decrypt(t), 12);
+                            }
                             //Below condition is to reduce chance of other packets come under same conditions
-                            Write(playerinfo.Client.TcpClient, t);
-                            if (t.Length > 18 && t[10] == 0x00 && t[11] == 0x18 && t[12] == 0x74 && t[13] == 0xCE && t[14] == 0xCA && t[15] == 0xE9 && t[16] == 0x87 && t[17] == 0x7F && t[18] == 0xAB)
+                            else if (t.Length > 18 && t[10] == 0x00 && t[11] == 0x18 && t[12] == 0x74 && t[13] == 0xCE && t[14] == 0xCA && t[15] == 0xE9 && t[16] == 0x87 && t[17] == 0x7F && t[18] == 0xAB)
                             {
                                 var tempPacket = t;
                                 Packet.SetStatusValues(tempPacket);
