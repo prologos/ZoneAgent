@@ -69,12 +69,7 @@ namespace ZoneAgent
         public static string GetCharName(byte[] packet, int index)
         {
             string character = "";
-            int count = 0;
-            while (packet[index + count] != '\0')
-            {
-                count++;
-            }
-            character = Encoding.Default.GetString(packet, index, count);
+            character = Encoding.Default.GetString(packet, index, 20).TrimEnd('\0');
             return character;
         }
         /// <summary>
@@ -394,31 +389,14 @@ namespace ZoneAgent
             return bytes;
         }
         /// <summary>
-        /// Creating reverse byte[] of int value
+        /// Creating reverse byte[4] of int32 value
         /// </summary>
         /// <param name="num">int value</param>
         /// <returns>reverse byte[] of int value</returns>
         private static byte[] CreateReverseHexPacket(int num)
         {
-            if (num == 0)
-                return new byte[] { 0x00, 0x00, 0x00, 0x00 };
-            string hexPort = string.Format("{0:X8}", num);
-            var tempByte = new byte[4];
-            tempByte = StringToByteArray(hexPort);
-            Array.Reverse(tempByte);
-            return tempByte;
-        }
-        /// <summary>
-        /// hex string to byte array
-        /// </summary>
-        /// <param name="hex">string value</param>
-        /// <returns>byte[]</returns>
-        public static byte[] StringToByteArray(string hex)
-        {
-            return Enumerable.Range(0, hex.Length)
-                             .Where(x => x % 2 == 0)
-                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                             .ToArray();
+            byte[] byteArray = BitConverter.GetBytes(num);
+            return byteArray;
         }
         /// <summary>
         /// Creating null string of specified no. of length
