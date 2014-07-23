@@ -97,6 +97,26 @@ namespace ZoneAgent
                 Config.BS_ID = Int16.Parse(GetIniValue("BATTLESERVER", "ID", SvrInfo, "3"));
                 Config.BS_IP = IPAddress.Parse(GetIniValue("BATTLESERVER", "IP", SvrInfo, "127.0.0.1"));
                 Config.BS_PORT = Int16.Parse(GetIniValue("BATTLESERVER", "PORT", SvrInfo, "6999"));
+                //Load Teleport List
+                string TeleportFilePath = GetIniValue("TELEPORTFILE", "FULLPATH", SvrInfo);
+                if (TeleportFilePath != "" && File.Exists(TeleportFilePath))
+                {
+                    this.btnReloadmap.Enabled = true;
+                    this.activeRestrict.Enabled = true;
+                    //Error prevention: The process cannot access the file because it is being used by another process.
+                    using (var fs = new FileStream(TeleportFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 0x1000, FileOptions.SequentialScan))
+                    using (var sr = new StreamReader(fs, true))
+                    {
+                        string readLine;
+                        while ((readLine = sr.ReadLine()) != null)
+                        {
+                            char[] delimiterChars = { ' ', '\t' };
+                            var temp = readLine.Split(delimiterChars);
+                            Config.TELEPORT_LIST.Add(temp[0].Trim());
+                        }
+                    }
+                    LoadLockedMap();
+                }
             }
             catch (Exception reader)
             {
@@ -240,6 +260,43 @@ namespace ZoneAgent
             }
             zonelog.AppendText(log + Environment.NewLine);
             zonelog.ScrollToCaret();
+        }
+        /// <summary>
+        /// Load Locked Map List
+        /// </summary>
+        private void LoadLockedMap()
+        {
+            Config.MAPLEVEL.Clear();
+            Config.USERLEVEL.Clear();
+
+            string LockedMapFile = Directory.GetCurrentDirectory() + @"\\locked.map.ini";
+            int LimitingStep = Int16.Parse(GetIniValue("LOCKEDMAPLIST", "LIMITINGSTEP", LockedMapFile, "0"));
+            for (int i = 0; i < LimitingStep; i++)
+            {
+                int MapCount = Int16.Parse(GetIniValue("MAPLEVEL" + i, "COUNT", LockedMapFile, "0"));
+                int UserCount = Int16.Parse(GetIniValue("USERLEVEL" + i, "COUNT", LockedMapFile, "0"));
+                List<string> MapList = new List<string>();
+                List<string> UserList = new List<string>();
+                for (int j = 0; j < MapCount; j++)
+                {
+                    MapList.Add(GetIniValue("MAPLEVEL" + i, "MAP" + j, LockedMapFile, "ReadError_GetVariable"));
+                }
+                for (int j = 0; j < UserCount; j++)
+                {
+                    UserList.Add(GetIniValue("USERLEVEL" + i, "USER" + j, LockedMapFile, "ReadError_GetVariable"));
+                }
+                Config.MAPLEVEL.Add(MapList);
+                Config.USERLEVEL.Add(UserList);
+            }
+        }
+        /// <summary>
+        /// Reload locked.map Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnReloadmap_Click(object sender, EventArgs e)
+        {
+            LoadLockedMap();
         }
     }
 }

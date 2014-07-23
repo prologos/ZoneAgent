@@ -588,6 +588,9 @@ namespace ZoneAgent
                     case Config.PAYMENT_PACKET:
                         Write(client.TcpClient, Packet.PrivateMessage(client.UniqID,Config.PayMsg));
                         break;
+                    case Config.TELEPORT_PACKET:
+                        RestrictingTeleportation(packet, client, read);
+                        break;
                 }
                 networkStream.BeginRead(client.Buffer, 0, client.Buffer.Length, OnDataRead, client);
             }
@@ -625,6 +628,72 @@ namespace ZoneAgent
             {
                 Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "WriteCallBack : " + writeCallBack);
             }
+        }
+        /// <summary>
+        /// Restricting teleportation of players to certain maps
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <param name="client"></param>
+        /// <param name="read"></param>
+        private void RestrictingTeleportation(byte[] packet, Client client, int read)
+        {
+            try
+            {
+                var temp = new byte[2];
+                Array.Copy(packet, 16, temp, 0, 2);
+                ushort TargetLine = BitConverter.ToUInt16(temp, 0);
+                //If Send a malformed packet for ZS crash.
+                if (TargetLine > Config.TELEPORT_LIST.Count)
+                {
+                    Write(client.TcpClient, Packet.PrivateMessage(client.UniqID, "Invalid Request."));
+                    return;
+                }
+                if (!_Main.activeRestrict.Checked)
+                {
+                    //Deactivated Restricting teleportation
+                    ZS.Send(Packet.CheckForMultiplePackets(packet, client.UniqID, read));
+                }
+                else
+                {
+                    //Activated Restricting teleportation
+                    string TargetMapNumber = Config.TELEPORT_LIST[TargetLine];
+                    bool isLockedMap = false;
+                    bool isAllowUser = false;
+                    for (int i = 0; i < Config.MAPLEVEL.Count; i++)
+                    {
+                        if (Config.MAPLEVEL[i].Contains(TargetMapNumber))
+                        {
+                            isLockedMap = true;
+                            for (int userLevel = i; userLevel < Config.USERLEVEL.Count; userLevel++)
+                            {
+                                if(Config.USERLEVEL[userLevel].Contains(player[client.UniqID].Account))
+                                {
+                                    isAllowUser = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isLockedMap)
+                            break;
+                    }
+                    if (isLockedMap)
+                    {
+                        if (isAllowUser)
+                        {
+                            ZS.Send(Packet.CheckForMultiplePackets(packet, client.UniqID, read));
+                        }
+                        else
+                        {
+                            Write(client.TcpClient, Packet.PrivateMessage(client.UniqID, "Your permission is not enough to move the map."));
+                        }
+                    }
+                    else
+                    {
+                        ZS.Send(Packet.CheckForMultiplePackets(packet, client.UniqID, read));
+                    }
+                }
+            }
+            catch { }
         }
 
         
