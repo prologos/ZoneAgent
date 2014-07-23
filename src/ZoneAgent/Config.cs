@@ -8,6 +8,11 @@ namespace ZoneAgent
     /// </summary>
     class Config
     {
+        //Teleport List
+        public static List<string> TELEPORT_LIST = new List<string>();
+        public static List<List<string>> MAPLEVEL = new List<List<string>>();
+        public static List<List<string>> USERLEVEL = new List<List<string>>();
+        //GMShouts
         public static int GMShout_count;
         public static string[] GMShout_list;
         //packet encrypt/decrypt Key Number
@@ -52,6 +57,7 @@ namespace ZoneAgent
         public const int BS_PACKET = 3; // Packet to be send to BattleServer
         public const int DISCONNECT_PACKET = 4; // Disconnect packet
         public const int PAYMENT_PACKET = 5; // Payment info packet
+        public const int TELEPORT_PACKET = 6; // Teleport packet
 
         //variables that is displayed in bar where ping is displayed
         public static string WZ = "1.0";
