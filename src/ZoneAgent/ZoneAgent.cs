@@ -648,12 +648,7 @@ namespace ZoneAgent
                     Write(client.TcpClient, Packet.PrivateMessage(client.UniqID, "Invalid Request."));
                     return;
                 }
-                if (!_Main.activeRestrict.Checked)
-                {
-                    //Deactivated Restricting teleportation
-                    ZS.Send(Packet.CheckForMultiplePackets(packet, client.UniqID, read));
-                }
-                else
+                if (_Main.activeRestrict.Checked && _Main.activeRestrict.Enabled)
                 {
                     //Activated Restricting teleportation
                     string TargetMapNumber = Config.TELEPORT_LIST[TargetLine];
@@ -691,6 +686,11 @@ namespace ZoneAgent
                     {
                         ZS.Send(Packet.CheckForMultiplePackets(packet, client.UniqID, read));
                     }
+                }
+                else
+                {
+                    //Deactivated Restricting teleportation
+                    ZS.Send(Packet.CheckForMultiplePackets(packet, client.UniqID, read));
                 }
             }
             catch { }
