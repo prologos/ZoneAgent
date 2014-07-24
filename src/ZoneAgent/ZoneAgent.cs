@@ -592,7 +592,8 @@ namespace ZoneAgent
                         RestrictingTeleportation(packet, client, read);
                         break;
                 }
-                networkStream.BeginRead(client.Buffer, 0, client.Buffer.Length, OnDataRead, client);
+                if (clients.Contains(client))
+                    networkStream.BeginRead(client.Buffer, 0, client.Buffer.Length, OnDataRead, client);
             }
             catch (Exception onDataRead)
             {
