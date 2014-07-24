@@ -360,6 +360,8 @@ namespace ZoneAgent
             // activeRestrict
             // 
             this.activeRestrict.AutoSize = true;
+            this.activeRestrict.Checked = true;
+            this.activeRestrict.CheckState = System.Windows.Forms.CheckState.Checked;
             this.activeRestrict.Enabled = false;
             this.activeRestrict.Location = new System.Drawing.Point(12, 344);
             this.activeRestrict.Name = "activeRestrict";
