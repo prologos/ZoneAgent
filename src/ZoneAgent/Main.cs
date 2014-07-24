@@ -97,6 +97,8 @@ namespace ZoneAgent
                 Config.BS_ID = Int16.Parse(GetIniValue("BATTLESERVER", "ID", SvrInfo, "3"));
                 Config.BS_IP = IPAddress.Parse(GetIniValue("BATTLESERVER", "IP", SvrInfo, "127.0.0.1"));
                 Config.BS_PORT = Int16.Parse(GetIniValue("BATTLESERVER", "PORT", SvrInfo, "6999"));
+                //Payement message
+                Config.PayMsg = GetIniValue("STARTUP", "PAYMSG", SvrInfo, Config.PayMsg);
                 //Load Teleport List
                 string TeleportFilePath = GetIniValue("TELEPORTFILE", "FULLPATH", SvrInfo);
                 if (TeleportFilePath != "" && File.Exists(TeleportFilePath))
