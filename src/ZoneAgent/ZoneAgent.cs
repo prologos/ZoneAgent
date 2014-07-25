@@ -25,7 +25,6 @@ namespace ZoneAgent
         Dictionary<int, PlayerInfo> player; // Dictionary to store player information int=client id and PlayerInfo object
         Timer LSReporter, PingDisplay;//LSReporter=timer to report LoginServer every 5 seconds,PingDisplay=timer to display ping to each player refresh every 10 seconds
         Ping ping;//to ping ip
-        PingReply reply;//to get reply of ping
         Random randomId;//to generate random client id initially its temporary and will not be used
         Main _Main; // Reference of Main class to access objects
         public static Timer GMShout; //timer to send GM messages
@@ -126,11 +125,8 @@ namespace ZoneAgent
                     {
                         var clientAddress = (IPEndPoint)client.TcpClient.Client.RemoteEndPoint;
                         ping = new Ping();
-                        reply = ping.Send(clientAddress.Address);
-                        Write(client.TcpClient,
-                              reply.Status == IPStatus.Success
-                                  ? Packet.DisplayPing(client.UniqID, reply.RoundtripTime)
-                                  : Packet.DisplayPing(client.UniqID, 1000));
+                        ping.PingCompleted += new PingCompletedEventHandler(PingCompleted);
+                        ping.SendAsync(clientAddress.Address, client);
                     }
 
                 }
@@ -139,6 +135,20 @@ namespace ZoneAgent
             {
                 Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "Display Ping : " + PingDisp);
             }
+        }
+        void  PingCompleted(object sender, PingCompletedEventArgs e)
+        {
+            Ping p = (Ping)sender;
+            var client = (Client)e.UserState;
+            if (clients.Contains(client))
+            {
+                Write(client.TcpClient,
+                    e.Reply.Status == IPStatus.Success ?
+                    Packet.DisplayPing(client.UniqID, e.Reply.RoundtripTime.ToString() + " ms") :
+                    Packet.DisplayPing(client.UniqID, "---"));
+            }
+            p.PingCompleted -= PingCompleted;
+            p.Dispose();
         }
 
         /// <summary>

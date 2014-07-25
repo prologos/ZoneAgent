@@ -290,7 +290,7 @@ namespace ZoneAgent
         /// </summary>
         /// <param name="packet"></param>
         /// <returns></returns>
-        public static byte[] DisplayPing(int clientID,long ping)
+        public static byte[] DisplayPing(int clientID, string ping)
         {
             byte[] packet = new byte[4];
             packet = CreateReverseHexPacket(clientID);
@@ -300,10 +300,7 @@ namespace ZoneAgent
             packet = CombineByteArray(packet, GetBytesFrom("Exp:" + Config.EXP + "  "));
             packet = CombineByteArray(packet, GetBytesFrom("Quest Exp:" + Config.QUEST_EXP + "  "));
             packet = CombineByteArray(packet, GetBytesFrom("Drop Rate:" + Config.DROP_RATE + "  "));
-            if(ping<1000)
-                packet = CombineByteArray(packet, GetBytesFrom("Ping:"+ping.ToString()+" ms"));
-            else
-                packet = CombineByteArray(packet, GetBytesFrom("Ping:---"));
+            packet = CombineByteArray(packet, GetBytesFrom("Ping:" + ping);
             int MsgLength = packet.Length - 34;
             MsgLength %= 4;
             packet = CombineByteArray(packet, GetBytesFrom(GetNullString(4 - MsgLength)));
