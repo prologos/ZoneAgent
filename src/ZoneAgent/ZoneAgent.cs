@@ -148,6 +148,7 @@ namespace ZoneAgent
                     Packet.DisplayPing(client.UniqID, "---"));
             }
             p.PingCompleted -= PingCompleted;
+            p.Dispose();
         }
 
         /// <summary>
