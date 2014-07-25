@@ -67,6 +67,6 @@ namespace ZoneAgent
         public static string DROP_RATE = "1.0";
 
         // Payment shout message
-        public const string PayMsg = "A3 is a free to play game!";
+        public static string PayMsg = "A3 is a free to play game!";
     }
 }
