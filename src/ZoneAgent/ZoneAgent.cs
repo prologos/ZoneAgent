@@ -144,7 +144,7 @@ namespace ZoneAgent
             {
                 Write(client.TcpClient,
                     e.Reply.Status == IPStatus.Success ?
-                    Packet.DisplayPing(client.UniqID, e.Reply.RoundtripTime.ToString()) :
+                    Packet.DisplayPing(client.UniqID, e.Reply.RoundtripTime.ToString() + " ms") :
                     Packet.DisplayPing(client.UniqID, "---"));
             }
             p.PingCompleted -= PingCompleted;
