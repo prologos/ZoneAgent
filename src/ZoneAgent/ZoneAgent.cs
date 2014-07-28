@@ -59,10 +59,10 @@ namespace ZoneAgent
 
             clients = new List<Client>();//initializing list of clients
             player = new Dictionary<int, PlayerInfo>();//initializing dictionary of player information
-            var HostIP = Dns.GetHostEntry(Dns.GetHostName())
-                 .AddressList
-                 .First(ip => ip.AddressFamily == AddressFamily.InterNetwork);
-            ZA = new TcpListener(HostIP, Config.ZA_PORT);//initializing ZoneAgent Listener
+            //var HostIP = Dns.GetHostEntry(Dns.GetHostName())
+            //     .AddressList
+            //     .First(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+            ZA = new TcpListener(Config.ZA_IP, Config.ZA_PORT);//initializing ZoneAgent Listener
 
             randomId = new Random();
             
