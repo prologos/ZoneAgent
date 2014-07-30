@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
 using System.Linq;
+
 namespace ZoneAgent
 {
     /// <summary>
@@ -621,8 +622,15 @@ namespace ZoneAgent
         /// <param name="bytes">byte[] data</param>
         private static void Write(TcpClient tcpClient, byte[] bytes)
         {
-            NetworkStream networkStream = tcpClient.GetStream();
-            networkStream.BeginWrite(bytes, 0, bytes.Length, WriteCallback, tcpClient);
+            try
+            {
+                NetworkStream networkStream = tcpClient.GetStream();
+                networkStream.BeginWrite(bytes, 0, bytes.Length, WriteCallback, tcpClient);
+            }
+            catch(Exception Write)
+            {
+                Logger.Write(Logger.GetLoggerFileName("ZoneAgent"), "Write : " + Write.ToString());
+            }
         }
         /// <summary>
         /// Handler for writing packets

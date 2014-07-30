@@ -300,7 +300,8 @@ namespace ZoneAgent
             packet = CombineByteArray(packet, GetBytesFrom("Exp:" + Config.EXP + "  "));
             packet = CombineByteArray(packet, GetBytesFrom("Quest Exp:" + Config.QUEST_EXP + "  "));
             packet = CombineByteArray(packet, GetBytesFrom("Drop Rate:" + Config.DROP_RATE + "  "));
-            packet = CombineByteArray(packet, GetBytesFrom("Ping:" + ping);
+            packet = CombineByteArray(packet, GetBytesFrom("Online Players:" + Config.PLAYER_COUNT + "  "));
+            packet = CombineByteArray(packet, GetBytesFrom("Ping:" + ping));
             int MsgLength = packet.Length - 34;
             MsgLength %= 4;
             packet = CombineByteArray(packet, GetBytesFrom(GetNullString(4 - MsgLength)));
