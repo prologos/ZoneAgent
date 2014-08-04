@@ -44,6 +44,7 @@ Features Added
 1. Ping display.
 2. Payement shout.
 3. GM shouts.
+4. Virtual Helper
 
 Issues
 ------
