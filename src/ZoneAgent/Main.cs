@@ -63,6 +63,7 @@ namespace ZoneAgent
                 ExitZoneAgent();
             }
             LoadConfig();
+            LoadFAQ();
             lblserverid.Text = Config.SERVER_ID.ToString();
             lblagentid.Text = Config.AGENT_ID.ToString();
             lblzoneport.Text = Config.ZA_PORT.ToString();
@@ -299,6 +300,34 @@ namespace ZoneAgent
         private void btnReloadmap_Click(object sender, EventArgs e)
         {
             LoadLockedMap();
+        }
+        /// <summary>
+        /// Load FAQ file
+        /// </summary>
+        private void LoadFAQ()
+        {
+            string FAQFile = Directory.GetCurrentDirectory() + @"\\faq.ini";
+            if (!File.Exists(FAQFile))
+                return;
+
+            Config.FAQ.Clear();
+            Config.ANSWERER = GetIniValue("ONLINEFAQ", "ANSWERER", FAQFile);
+            int FAQCount = Int16.Parse(GetIniValue("ONLINEFAQ", "QNACOUNT", FAQFile, "0"));
+            for (int i = 0; i < FAQCount; i++)
+            {
+                string Question = GetIniValue("ONLINEFAQ", "Q" + i, FAQFile);
+                string Answer = GetIniValue("ONLINEFAQ", "A" + i, FAQFile);
+                Config.FAQ.Add(Question, Answer);
+            }
+        }
+        /// <summary>
+        /// Reload FAQ Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnReloadFAQ_Click(object sender, EventArgs e)
+        {
+            LoadFAQ();
         }
     }
 }

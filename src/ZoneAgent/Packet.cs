@@ -66,11 +66,12 @@ namespace ZoneAgent
         /// <param name="packet">packet data</param>
         /// <param name="index">index value</param>
         /// <returns>returns string fetched from packet data</returns>
-        public static string GetCharName(byte[] packet, int index)
+        public static string GetCharName(byte[] packet, int index, int count = 20)
         {
             string character = "";
-            character = Encoding.Default.GetString(packet, index, 20).TrimEnd('\0');
-            return character;
+            character = Encoding.Default.GetString(packet, index, count).TrimEnd('\0');
+            string[] charArray = character.Split('\0');
+            return charArray[0];
         }
         /// <summary>
         /// Gets Client ID from packet
@@ -222,7 +223,9 @@ namespace ZoneAgent
             else if (packet[10] == 0x01 && packet[11] == 0x35)//BattleServer exit Packet
                 packetType = Config.ZS_PACKET;
             else if (length == 18 && packet[8] == 0x03 && packet[9] == 0xFF)//Teleport packet
-                packetType = Config.TELEPORT_PACKET;    
+                packetType = Config.TELEPORT_PACKET;
+            else if (length == 98 && packet[11] == 0x18 && packet[12] == 0x7B)//Whisper Chat packet
+                packetType = Config.WHISPERCHAT_PACKET;
             return packetType;
         }
         /// <summary>

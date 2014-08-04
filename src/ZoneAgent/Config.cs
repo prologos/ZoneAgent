@@ -9,6 +9,9 @@ namespace ZoneAgent
     /// </summary>
     class Config
     {
+        //Virtual helper
+        public static string ANSWERER = "";
+        public static Dictionary<string, string> FAQ = new Dictionary<string, string>();
         //Teleport List
         public static List<string> TELEPORT_LIST = new List<string>();
         public static List<List<string>> MAPLEVEL = new List<List<string>>();
@@ -59,6 +62,7 @@ namespace ZoneAgent
         public const int DISCONNECT_PACKET = 4; // Disconnect packet
         public const int PAYMENT_PACKET = 5; // Payment info packet
         public const int TELEPORT_PACKET = 6; // Teleport packet
+        public const int WHISPERCHAT_PACKET = 7; //Whisper Chat Packet
 
         //variables that is displayed in bar where ping is displayed
         public static string WZ = "1.0";
