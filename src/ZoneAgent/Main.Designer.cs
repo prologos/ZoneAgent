@@ -64,6 +64,7 @@ namespace ZoneAgent
             this.label13 = new System.Windows.Forms.Label();
             this.activeRestrict = new System.Windows.Forms.CheckBox();
             this.btnReloadmap = new System.Windows.Forms.Button();
+			this.btnReloadFAQ = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label4
@@ -380,6 +381,16 @@ namespace ZoneAgent
             this.btnReloadmap.Text = "Reload locked.map";
             this.btnReloadmap.UseVisualStyleBackColor = true;
             this.btnReloadmap.Click += new System.EventHandler(this.btnReloadmap_Click);
+			// 
+            // btnReloadFAQ
+            // 
+            this.btnReloadFAQ.Location = new System.Drawing.Point(12, 325);
+            this.btnReloadFAQ.Name = "btnReloadFAQ";
+            this.btnReloadFAQ.Size = new System.Drawing.Size(100, 27);
+            this.btnReloadFAQ.TabIndex = 99;
+            this.btnReloadFAQ.Text = "Reload FAQ";
+            this.btnReloadFAQ.UseVisualStyleBackColor = true;
+            this.btnReloadFAQ.Click += new System.EventHandler(this.btnReloadFAQ_Click);
             // 
             // Main
             // 
@@ -387,6 +398,7 @@ namespace ZoneAgent
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(311, 513);
+			this.Controls.Add(this.btnReloadFAQ);
             this.Controls.Add(this.btnReloadmap);
             this.Controls.Add(this.activeRestrict);
             this.Controls.Add(this.zonelog);
@@ -468,6 +480,6 @@ namespace ZoneAgent
     private System.Windows.Forms.Label label13;
     public System.Windows.Forms.CheckBox activeRestrict;
     private System.Windows.Forms.Button btnReloadmap;
+	private System.Windows.Forms.Button btnReloadFAQ;
     }
 }
-
