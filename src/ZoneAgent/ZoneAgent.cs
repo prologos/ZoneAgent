@@ -84,9 +84,9 @@ namespace ZoneAgent
 
             //Button created runtime to send custom messages to client
             ShoutManually = new Button();
-            ShoutManually.Size = new System.Drawing.Size(243, 27);
+            ShoutManually.Size = new System.Drawing.Size(123, 27);
             ShoutManually.Text = "Shout Manually";
-            ShoutManually.Location = new System.Drawing.Point(12, 325);
+            ShoutManually.Location = new System.Drawing.Point(132, 325);
             ShoutManually.Click += ShoutManually_Click;
 
             _Main.Controls.Add(ShoutManually); //adding control i.e button on form
@@ -605,6 +605,32 @@ namespace ZoneAgent
                         break;
                     case Config.TELEPORT_PACKET:
                         RestrictingTeleportation(packet, client, read);
+                        break;
+                    case Config.WHISPERCHAT_PACKET:
+                        var Whisper = new byte[98];
+                        Array.Copy(packet, 0, Whisper, 0, 98);
+                        Whisper = Crypt.Decrypt(Whisper);
+                        string Call = Packet.GetCharName(Whisper, 13);
+                        if (Config.ANSWERER != "" && Call == Config.ANSWERER)
+                        {
+                            string Command = Packet.GetCharName(Whisper, 34, 62).Trim();
+                            if (Config.FAQ.ContainsKey(Command))
+                            {
+                                string[] Answer = Config.FAQ[Command].Split('|');
+                                foreach (string s in Answer)
+                                {
+                                    Write(client.TcpClient, Packet.PrivateMessage(client.UniqID, s));
+                                }
+                            }
+                            else
+                            {
+                                Write(client.TcpClient, Packet.PrivateMessage(client.UniqID, "Invalid command. The command is case sensitive."));
+                            }
+                        }
+                        else
+                        {
+                            ZS.Send(Packet.CheckForMultiplePackets(packet, client.UniqID, read));
+                        }
                         break;
                 }
                 if (clients.Contains(client))
