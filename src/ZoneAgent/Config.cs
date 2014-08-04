@@ -10,7 +10,7 @@ namespace ZoneAgent
     class Config
     {
         //Virtual helper
-        public static string ANSWERER;
+        public static string ANSWERER = "";
         public static Dictionary<string, string> FAQ = new Dictionary<string, string>();
         //Teleport List
         public static List<string> TELEPORT_LIST = new List<string>();
