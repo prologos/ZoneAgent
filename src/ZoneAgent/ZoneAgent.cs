@@ -484,11 +484,8 @@ namespace ZoneAgent
                 var read = networkStream.EndRead(asyncResult);
                 if (read == 0 || read < 10)
                 {
-                    lock (clients)
-                    {
-                        clients.Remove(client);
-                        return;
-                    }
+                    client.TcpClient.GetStream().Close();
+                    return;
                 }
                 var packet = client.Buffer;
                 PlayerInfo playerInformation=null;
@@ -497,11 +494,8 @@ namespace ZoneAgent
                 switch (Packet.GetPacketType(packet, read, playerInformation))
                 {
                     case Config.INVALID: //For invalid request i.e packet size 0 or <=10
-                        lock (clients)
-                        {
-                            clients.Remove(client);
-                            return;
-                        }
+                        client.TcpClient.GetStream().Close();
+                        return;
                     case Config.LOGIN_PACKET: //Login to ZoneAgent
                         var temp = new byte[4];
                         Array.Copy(packet, 4, temp, 0, 4);
@@ -538,7 +532,6 @@ namespace ZoneAgent
                             else if (playerinfo.ZoneStatus == Config.BS_ID)
                                 BS.Send(Packet.AddClientID(packet, client.UniqID, read));
                         }
-                        Write(client.TcpClient, Packet.AddClientID(packet, client.UniqID, read));
                         break;
                     case Config.PAYMENT_PACKET:
                         Write(client.TcpClient, Packet.PrivateMessage(client.UniqID,Config.PayMsg));
