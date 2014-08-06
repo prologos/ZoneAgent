@@ -222,7 +222,7 @@ namespace ZoneAgent
                 packetType = Config.BS_PACKET;
             else if (packet[10] == 0x01 && packet[11] == 0x35)//BattleServer exit Packet
                 packetType = Config.ZS_PACKET;
-            else if (length == 18 && packet[8] == 0x03 && packet[9] == 0xFF)//Teleport packet
+            else if (length == 18 && packet[10] == 0x12 && packet[11] == 0x11)//Teleport packet
                 packetType = Config.TELEPORT_PACKET;
             else if (length == 98 && packet[11] == 0x18 && packet[12] == 0x7B)//Whisper Chat packet
                 packetType = Config.WHISPERCHAT_PACKET;
